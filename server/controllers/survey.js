@@ -1,0 +1,81 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyListPage = void 0;
+const survey_1 = __importDefault(require("../models/survey"));
+function DisplaySurveyListPage(req, res, next) {
+    survey_1.default.find(function (err, surveyCollection) {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        res.render('index-sub', { title: 'Survey List', page: 'survey/survey-list', survey: surveyCollection });
+    }).sort('name');
+}
+exports.DisplaySurveyListPage = DisplaySurveyListPage;
+;
+function DisplaySurveyEditPage(req, res, next) {
+    let id = req.params.id;
+    survey_1.default.findById(id, {}, {}, (err, surveyListItemToEdit) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        res.render('index-sub', { title: "Survey Update", page: "survey/survey-edit", item: surveyListItemToEdit });
+    });
+}
+exports.DisplaySurveyEditPage = DisplaySurveyEditPage;
+;
+function ProcessSurveyEditPage(req, res, next) {
+    let id = req.params.id;
+    let updatedItem = new survey_1.default({
+        "_id": id,
+        "userName": req.body.userName,
+        "question": req.body.question,
+        "answer": req.body.answer,
+        "remarks": req.body.remarks
+    });
+    survey_1.default.updateOne({ _id: id }, updatedItem, {}, (err) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        res.redirect('/survey/list');
+    });
+}
+exports.ProcessSurveyEditPage = ProcessSurveyEditPage;
+function DisplaySurveyAddPage(req, res, next) {
+    res.render('index-sub', { title: 'Create Survey', page: 'survey/survey-edit', item: '' });
+}
+exports.DisplaySurveyAddPage = DisplaySurveyAddPage;
+function ProcessSurveyAddPage(req, res, next) {
+    let newContact = new survey_1.default({
+        "userName": req.body.userName,
+        "question": req.body.question,
+        "answer": req.body.answer,
+        "remarks": req.body.remarks
+    });
+    survey_1.default.create(newContact, (err) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        ;
+        res.redirect('/survey/list');
+    });
+}
+exports.ProcessSurveyAddPage = ProcessSurveyAddPage;
+function ProcessSurveyDeletePage(req, res, next) {
+    let id = req.params.id;
+    survey_1.default.remove({ _id: id }, (err) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        res.redirect('/survey/list');
+    });
+}
+exports.ProcessSurveyDeletePage = ProcessSurveyDeletePage;
+//# sourceMappingURL=survey.js.map
