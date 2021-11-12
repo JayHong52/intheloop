@@ -6,7 +6,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_1 = __importDefault(require("http"));
 const debug_1 = __importDefault(require("debug"));
-(0, debug_1.default)('comp229-assignment2');
+(0, debug_1.default)('IntheLoop - Survey');
 const app_1 = __importDefault(require("./server/config/app"));
 const port = normalizePort(process.env.PORT || '3000');
 app_1.default.set('port', port);

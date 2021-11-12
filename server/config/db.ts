@@ -1,12 +1,16 @@
-/*=============================================
-  FileName: config/db.ts
-  ProjectName: COMP229-005, Assignment #2
+/*=======================================================
+  FileName: /server/config/db.ts
+  ProjectName: IntheLoop - Survey 
   CompanyName: Centennial Collge, Fall 2021
-  Author: Jiwoong Hong, 301153138
-  Date: 2021-10-22
-  ============================================*/
+  Author: Hong, Jiwoong - 301153138
+          Vargas, Joel  - 301161522
+          Jiang, Chen   - 301082999
+          Zheng, Ziwei  - 301180464
+  Date: 2021-11-12
+  Remarks: Database Setup
+  ======================================================*/
 
-export const LocalUri = "mongodb://localhost:27017/myFirstDatabase"
+export const LocalUri = "mongodb://localhost:27017/intheloop"
 export const RemoteUri = "mongodb+srv://jhong52:jhong52password@comp229-f2021.ikl47.mongodb.net/intheloop?retryWrites=true&w=majority";
 export const HostName = "IntheLoop-MongoDB Atlas";
 export const Secret = "NotSoSecret"; 

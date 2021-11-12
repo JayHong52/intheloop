@@ -1,19 +1,23 @@
 #!/usr/bin/env node
 
-/*=============================================
+/*=======================================================
   FileName: server.ts
-  ProjectName: COMP229-005, Assignment #2
+  ProjectName: IntheLoop - Survey 
   CompanyName: Centennial Collge, Fall 2021
-  Author: Jiwoong Hong, 301153138
-  Date: 2021-10-22
-  ============================================*/
+  Author: Hong, Jiwoong - 301153138
+          Vargas, Joel  - 301161522
+          Jiang, Chen   - 301082999
+          Zheng, Ziwei  - 301180464
+  Date: 2021-11-12
+  Remarks: -
+  ======================================================*/
 
 /** 
  * Module dependencies.
  */
 import http from 'http';
 import debug from 'debug';  
-debug('comp229-assignment2');
+debug('IntheLoop - Survey');
 
 import app from './server/config/app';
 
