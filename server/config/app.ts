@@ -26,11 +26,14 @@ import MongoStore from 'connect-mongo';
 import session from 'express-session'
 import flash from 'connect-flash';
 
+import { isLoggedIn } from "../middlewares/auth";
+
 /*============================================*/
 /* Import Routers                             */
 /*============================================*/
 import indexRouter from '../routes/index';
 import surveyRouter from '../routes/survey';
+import userRouter from '../routes/user';
 
 /*============================================*/
 /* Database Configuration                     */
@@ -85,7 +88,8 @@ app.use(passport.session());
 
 // Router Middleware 
 app.use('/', indexRouter);
-app.use('/survey', surveyRouter);
+app.use('/survey', isLoggedIn, surveyRouter);
+app.use('/auth', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function(_req: any, _res: any, next: (arg0: any) => void) {

@@ -1,4 +1,4 @@
-<!-- Navigation Bar: TOP -->
+<!-- Navigation Bar: Top -->
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
@@ -12,24 +12,53 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-
-        <!-- HOME  -->
+ 
+        <!-- HOME -->
         <% if (title=="Home" ) { %>
-        <li class="nav-item active bg-secondary rounded-3">
+        <li class="nav-item active bg-secondary rounded-3">       
+        
         <% } else { %>
         <li class="nav-item">
         <% } %>
-        <a class="nav-link" aria-current="page" href="/home">home</a>
-        </li>
 
-        <!-- SAMPLE SURVEY -->>
-        <% if (title=="Survey" ) { %>
+        <a class="nav-link" aria-current="page" href="/home">Home</a>
+        </li>         
+        
+        <!-- Logged in: Surveys: Active -->
+        <% if ( typeof displayName == 'string' && displayName && title=="Survey List" ) { %>
         <li class="nav-item active bg-secondary rounded-3">
-        <% } else { %>
+        <a class="nav-link" href="/survey/list">Surveys</a>
+        </li>  
+
         <li class="nav-item">
-        <% } %>
-        <a class="nav-link" aria-current="page" href="/survey/list">survey</a>
+        <a class="nav-link" href="/auth/logout"><i class="fas fa-sign-out-alt fa-lg"></i> Logout</a>
         </li>
+                  
+        <!-- Logged in: Surveys: Not Active -->
+        <% } else if ( typeof displayName == 'string' && displayName && title!="Survey List"){ %>
+  
+        <li class="nav-item">
+        <a class="nav-link" href="/survey/list">Surveys</a>
+        </li>         
+        
+        <li class="nav-item">
+        <a class="nav-link" href="/auth/logout"><i class="fas fa-sign-out-alt fa-lg"></i> Logout</a>
+        </li>
+  
+        <% } else if ( title == "Sign In" ) { %>
+  
+        <li class="nav-item active bg-secondary rounded-3">
+        <a class="nav-link" href="/auth/login"><i class="fas fa-sign-in-alt fa-lg"></i> Login</a>
+        </li>   
+          
+        <% } else { %>
+
+        <li class="nav-item">
+        <a class="nav-link" href="/auth/login"><i class="fas fa-sign-in-alt fa-lg"></i> Login</a>
+        </li>   
+  
+        <% } %>
+
       </ul>
     </div>
   </div>

@@ -5,25 +5,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyListPage = void 0;
 const survey_1 = __importDefault(require("../models/survey"));
+const utils_1 = require("../utils");
 function DisplaySurveyListPage(req, res, next) {
-    survey_1.default.find(function (err, surveyCollection) {
+    survey_1.default.find(function (err, intheLoopSurveys) {
         if (err) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: 'Survey List', page: 'survey/survey-list', survey: surveyCollection });
+        res.render('index-sub', { title: 'Survey List', page: 'survey/survey-list', survey: intheLoopSurveys, displayName: (0, utils_1.UserDisplayName)(req) });
     }).sort('name');
 }
 exports.DisplaySurveyListPage = DisplaySurveyListPage;
 ;
 function DisplaySurveyEditPage(req, res, next) {
     let id = req.params.id;
-    survey_1.default.findById(id, {}, {}, (err, surveyListItemToEdit) => {
+    survey_1.default.findById(id, {}, {}, (err, SurveyListItemToEdit) => {
         if (err) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: "Survey Update", page: "survey/survey-edit", item: surveyListItemToEdit });
+        res.render('index-sub', { title: "Survey Update", page: "survey/survey-edit", item: SurveyListItemToEdit, displayName: (0, utils_1.UserDisplayName)(req) });
     });
 }
 exports.DisplaySurveyEditPage = DisplaySurveyEditPage;
@@ -32,9 +33,9 @@ function ProcessSurveyEditPage(req, res, next) {
     let id = req.params.id;
     let updatedItem = new survey_1.default({
         "_id": id,
-        "userName": req.body.userName,
-        "question": req.body.question,
-        "answer": req.body.answer,
+        "name": req.body.name,
+        "phone": req.body.phone,
+        "email": req.body.email,
         "remarks": req.body.remarks
     });
     survey_1.default.updateOne({ _id: id }, updatedItem, {}, (err) => {
@@ -47,14 +48,14 @@ function ProcessSurveyEditPage(req, res, next) {
 }
 exports.ProcessSurveyEditPage = ProcessSurveyEditPage;
 function DisplaySurveyAddPage(req, res, next) {
-    res.render('index-sub', { title: 'Create Survey', page: 'survey/survey-edit', item: '' });
+    res.render('index-sub', { title: 'Add Survey', page: 'survey/survey-edit', item: '', displayName: (0, utils_1.UserDisplayName)(req) });
 }
 exports.DisplaySurveyAddPage = DisplaySurveyAddPage;
 function ProcessSurveyAddPage(req, res, next) {
     let newContact = new survey_1.default({
-        "userName": req.body.userName,
-        "question": req.body.question,
-        "answer": req.body.answer,
+        "name": req.body.name,
+        "phone": req.body.phone,
+        "email": req.body.email,
         "remarks": req.body.remarks
     });
     survey_1.default.create(newContact, (err) => {

@@ -32,8 +32,10 @@ const passport_1 = __importDefault(require("passport"));
 const connect_mongo_1 = __importDefault(require("connect-mongo"));
 const express_session_1 = __importDefault(require("express-session"));
 const connect_flash_1 = __importDefault(require("connect-flash"));
+const auth_1 = require("../middlewares/auth");
 const index_1 = __importDefault(require("../routes/index"));
 const survey_1 = __importDefault(require("../routes/survey"));
+const user_1 = __importDefault(require("../routes/user"));
 const DBConfig = __importStar(require("./db"));
 mongoose_1.default.connect((DBConfig.RemoteUri) ? DBConfig.RemoteUri : DBConfig.LocalUri);
 const StoreOptions = {
@@ -66,7 +68,8 @@ app.use((0, express_session_1.default)(StoreOptions));
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
 app.use('/', index_1.default);
-app.use('/survey', survey_1.default);
+app.use('/survey', auth_1.isLoggedIn, survey_1.default);
+app.use('/auth', user_1.default);
 app.use(function (_req, _res, next) {
     next((0, http_errors_1.default)(404));
 });

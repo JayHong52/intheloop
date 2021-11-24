@@ -1,60 +1,57 @@
-/*=======================================================
-  FileName: /server/controllers/survey.ts
-  ProjectName: IntheLoop - Survey 
+/*=============================================
+  FileName: controllers/Survey.ts
+  ProjectName: COMP229-005, Assignment #2
   CompanyName: Centennial Collge, Fall 2021
-  Author: Hong, Jiwoong - 301153138
-          Vargas, Joel  - 301161522
-          Jiang, Chen   - 301082999
-          Zheng, Ziwei  - 301180464
-  Date: 2021-11-12
-  Remarks: Survey route controller 
-  ======================================================*/
+  Author: Jiwoong Hong, 301153138
+  Date: 2021-10-22
+  ============================================*/
 
 import express from 'express';
-import surveyModel from '../models/survey';
+import SurveyModel from '../models/survey';
+import { UserDisplayName } from '../utils';
 
 // ===========================
-//   survey-list : DISPLAY 
+//   Survey-list : DISPLAY 
 // ===========================
 export function DisplaySurveyListPage(req: express.Request, res: express.Response, next: express.NextFunction) {
-    surveyModel.find(
-        function (err, surveyCollection) {
+    SurveyModel.find(
+        function (err, intheLoopSurveys) {
         if (err) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', {title: 'Survey List', page: 'survey/survey-list', survey: surveyCollection})
+        res.render('index-sub', {title: 'Survey List', page: 'survey/survey-list', survey: intheLoopSurveys, displayName: UserDisplayName(req)})
         }
     ).sort('name'); 
 };
 
 // ===========================
-//   survey-edit : DISPLAY
+//   Survey-edit : DISPLAY
 // ===========================  
 export function DisplaySurveyEditPage(req: express.Request, res: express.Response, next: express.NextFunction) {
     let id = req.params.id;
-    surveyModel.findById(id, {}, {}, (err, surveyListItemToEdit) => {
+    SurveyModel.findById(id, {}, {}, (err, SurveyListItemToEdit) => {
         if (err) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: "Survey Update", page: "survey/survey-edit", item: surveyListItemToEdit})
+        res.render('index-sub', { title: "Survey Update", page: "survey/survey-edit", item: SurveyListItemToEdit, displayName: UserDisplayName(req)})
     })
 };
 
 // ===========================
-//   survey-edit : PROCESS
+//   Survey-edit : PROCESS
 // ===========================
 export function ProcessSurveyEditPage(req: express.Request, res: express.Response, next: express.NextFunction) {
     let id = req.params.id;
-    let updatedItem = new surveyModel({
+    let updatedItem = new SurveyModel({
         "_id": id,
-        "userName": req.body.userName,
-        "question": req.body.question,
-        "answer": req.body.answer,
+        "name": req.body.name,
+        "phone": req.body.phone,
+        "email": req.body.email,
         "remarks": req.body.remarks
     });
-    surveyModel.updateOne({ _id: id }, updatedItem, {}, (err) => {
+    SurveyModel.updateOne({ _id: id }, updatedItem, {}, (err) => {
         if (err) {
             console.error(err);
             res.end(err);
@@ -64,25 +61,25 @@ export function ProcessSurveyEditPage(req: express.Request, res: express.Respons
 }
 
 // ====================================
-//   survey-edit : Create - DISPLAY
+//   Survey-edit : Create - DISPLAY
 // ====================================
 export function DisplaySurveyAddPage(req: express.Request, res: express.Response, next: express.NextFunction) {
-    res.render('index-sub', { title: 'Create Survey', page: 'survey/survey-edit', item: ''});
+    res.render('index-sub', { title: 'Add Survey', page: 'survey/survey-edit', item: '', displayName: UserDisplayName(req) });
 }
 
 // ====================================
-//   survey-edit : Create - PROCESS 
+//   Survey-edit : Create - PROCESS 
 // ====================================
 export function ProcessSurveyAddPage(req: express.Request, res: express.Response, next: express.NextFunction): void {
 
-    let newContact = new surveyModel({
-        "userName": req.body.userName,
-        "question": req.body.question,
-        "answer": req.body.answer,
+    let newContact = new SurveyModel({
+        "name": req.body.name,
+        "phone": req.body.phone,
+        "email": req.body.email,
         "remarks": req.body.remarks
     });
 
-    surveyModel.create(newContact, (err: any) => {
+    SurveyModel.create(newContact, (err: any) => {
         if (err) {
             console.error(err);
             res.end(err);
@@ -92,11 +89,11 @@ export function ProcessSurveyAddPage(req: express.Request, res: express.Response
 }
 
 // ====================================
-//   survey-edit : Delete - PROCESS 
+//   Survey-edit : Delete - PROCESS 
 // ====================================
 export function ProcessSurveyDeletePage(req: express.Request, res: express.Response, next: express.NextFunction) {
     let id = req.params.id;
-    surveyModel.remove({ _id: id }, (err) => {
+    SurveyModel.remove({ _id: id }, (err) => {
         if (err) {
             console.error(err);
             res.end(err);
