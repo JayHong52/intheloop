@@ -33,9 +33,9 @@ function ProcessSurveyEditPage(req, res, next) {
     let id = req.params.id;
     let updatedItem = new survey_1.default({
         "_id": id,
-        "name": req.body.name,
-        "phone": req.body.phone,
-        "email": req.body.email,
+        "userName": req.body.userName,
+        "question": req.body.question,
+        "answer": req.body.answer,
         "remarks": req.body.remarks
     });
     survey_1.default.updateOne({ _id: id }, updatedItem, {}, (err) => {
@@ -52,13 +52,13 @@ function DisplaySurveyAddPage(req, res, next) {
 }
 exports.DisplaySurveyAddPage = DisplaySurveyAddPage;
 function ProcessSurveyAddPage(req, res, next) {
-    let newContact = new survey_1.default({
-        "name": req.body.name,
-        "phone": req.body.phone,
-        "email": req.body.email,
+    let newSurvey = new survey_1.default({
+        "userName": req.body.userName,
+        "question": req.body.question,
+        "answer": req.body.answer,
         "remarks": req.body.remarks
     });
-    survey_1.default.create(newContact, (err) => {
+    survey_1.default.create(newSurvey, (err) => {
         if (err) {
             console.error(err);
             res.end(err);
