@@ -55,8 +55,7 @@ const signupFunction: any = async (
         console.log(req.body);
 
         if (!username || !password || !email || !firstName || !lastName) {
-            console.log("Invalid body fields");
-            return done(null, false);
+            return done(null, false, { message: "Invalid body fields" });
         };
 
         const query = {
@@ -68,9 +67,8 @@ const signupFunction: any = async (
         const user = await UserModel.findOne(query);
 
         if (user) {
-            console.log('User already exists');
             console.log(user);
-            return done(null, false);
+            return done(null, false, { message: "User already exists" });
         } else {
             const userData = {
                 username,

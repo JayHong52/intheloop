@@ -39,8 +39,7 @@ const signupFunction = (req, username, password, done) => __awaiter(void 0, void
         const { username, password, firstName, lastName, email } = req.body;
         console.log(req.body);
         if (!username || !password || !email || !firstName || !lastName) {
-            console.log("Invalid body fields");
-            return done(null, false);
+            return done(null, false, { message: "Invalid body fields" });
         }
         ;
         const query = {
@@ -49,9 +48,8 @@ const signupFunction = (req, username, password, done) => __awaiter(void 0, void
         console.log(query);
         const user = yield user_1.default.findOne(query);
         if (user) {
-            console.log('User already exists');
             console.log(user);
-            return done(null, false);
+            return done(null, false, { message: "User already exists" });
         }
         else {
             const userData = {
