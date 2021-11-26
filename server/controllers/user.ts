@@ -34,6 +34,16 @@ export async function DisplayRegisterPage(req: Request, res: Response, next: Nex
 }
 
 // ==========================
+//   PROCESS: LogIn Page
+// ==========================
+export async function ProcessLogInPage(req: Request, res:Response, next: NextFunction) 
+{
+    passport.authenticate('login', {
+        successRedirect: '/survey/list', 
+        failureRedirect: '/auth/login'}); 
+}
+
+// ==========================
 //   PROCESS: Register Page
 // ==========================
 export function ProcessRegisterPage(req: Request, res: Response, next: NextFunction) {
