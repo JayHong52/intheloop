@@ -28,9 +28,19 @@ export async function DisplayLogInPage(req: Request, res: Response) {
 // ==========================
 export async function DisplayRegisterPage(req: Request, res: Response, next: NextFunction): Promise<void> {
     if (!req.user) {
-        return res.render('index-sub', { title: 'Register', page: 'auth/register', messages: req.flash('registerMessage'), displayName: UserDisplayName(req) })
+        return res.render('index-sub', { title: 'Register', page: 'auth/register', messages: '', displayName: UserDisplayName(req) })
     }
     return res.redirect('/survey/list');
+}
+
+// ==========================
+//   PROCESS: LogIn Page
+// ==========================
+export async function ProcessLogInPage(req: Request, res:Response, next: NextFunction) 
+{
+    passport.authenticate('login', {
+        successRedirect: '/survey/list', 
+        failureRedirect: '/auth/login'}); 
 }
 
 // ==========================

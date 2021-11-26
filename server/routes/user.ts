@@ -10,7 +10,7 @@
   ======================================================*/
 
 import { Router } from "express";
-import { DisplayLogInPage, DisplayRegisterPage, ProcessLogout, ProcessRegisterPage } from "../controllers/user";
+import { DisplayLogInPage, DisplayRegisterPage, ProcessLogInPage, ProcessLogout, ProcessRegisterPage } from "../controllers/user";
 import passport from "../middlewares/auth";
 
 const router = Router();
@@ -19,7 +19,7 @@ const router = Router();
 router.get('/login', DisplayLogInPage);
 
 // LogIn Page: PROCESS
-router.post('/login', passport.authenticate('login', {successRedirect: '/survey/list', failureRedirect:'/auth/login'})); 
+router.post('/login', ProcessLogInPage);
 
 // Register Page: DISPLAY
 router.get('/register', DisplayRegisterPage);
