@@ -27,7 +27,7 @@ exports.DisplayLogInPage = DisplayLogInPage;
 function DisplayRegisterPage(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!req.user) {
-            return res.render('index-sub', { title: 'Register', page: 'auth/register', messages: req.flash('registerMessage'), displayName: (0, utils_1.UserDisplayName)(req) });
+            return res.render('index-sub', { title: 'Register', page: 'auth/register', messages: '', displayName: (0, utils_1.UserDisplayName)(req) });
         }
         return res.redirect('/survey/list');
     });

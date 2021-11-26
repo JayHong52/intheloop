@@ -25,23 +25,25 @@ const strategyOptions = {
 const loginFunction = (req, username, password, done) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_1.default.findOne({ username });
     if (!user) {
-        return done(null, false, { message: "User does not exist" });
+        return done(null, false, { message: "Error #1: User does not exist" });
     }
     ;
     if (!(yield user.isValidPassword(password))) {
-        return done(null, false, { message: "Password is not valid" });
+        return done(null, false, { message: "Error #2: Password is not valid" });
     }
     ;
     return done(null, user);
 });
 const signupFunction = (req, username, password, done) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { username, password, firstName, lastName, email } = req.body;
+        const { username, password, confirmPassword, firstName, lastName, email } = req.body;
         console.log(req.body);
-        if (!username || !password || !email || !firstName || !lastName) {
-            return done(null, false, { message: "Invalid body fields" });
+        if (!username || !password || !confirmPassword || !email || !firstName || !lastName) {
+            return done(null, false, { message: 'Error: Missing input data(s)' });
         }
-        ;
+        else if (password !== confirmPassword) {
+            return done(null, false, { message: 'Error: Password confirmation failed' });
+        }
         const query = {
             $or: [{ username: username }, { email: email }]
         };
@@ -49,7 +51,7 @@ const signupFunction = (req, username, password, done) => __awaiter(void 0, void
         const user = yield user_1.default.findOne(query);
         if (user) {
             console.log(user);
-            return done(null, false, { message: "User already exists" });
+            return done(null, false, { message: 'Error: User already exists' });
         }
         else {
             const userData = {
