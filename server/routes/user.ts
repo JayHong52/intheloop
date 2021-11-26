@@ -10,7 +10,7 @@
   ======================================================*/
 
 import { Router } from "express";
-import { DisplayLogInPage, DisplayRegisterPage, ProcessLogInPage, ProcessLogout, ProcessRegisterPage } from "../controllers/user";
+import { DisplayLogInPage, DisplayRegisterPage, ProcessLogout, ProcessRegisterPage } from "../controllers/user";
 import passport from "../middlewares/auth";
 
 const router = Router();
@@ -19,13 +19,7 @@ const router = Router();
 router.get('/login', DisplayLogInPage);
 
 // LogIn Page: PROCESS
-<<<<<<< HEAD
-router.post('/login', passport.authenticate('login', {
-  successRedirect: '/survey/list', 
-  failureRedirect: '/auth/login'}));
-=======
-router.post('/login', ProcessLogInPage);
->>>>>>> 3447835bde39b28f02ab5ff9dd5956fb49df291a
+router.post('/login', passport.authenticate('login', {successRedirect: '/survey/list', failureRedirect: '/auth/login'}));
 
 // Register Page: DISPLAY
 router.get('/register', DisplayRegisterPage);
