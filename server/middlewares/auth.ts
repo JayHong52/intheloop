@@ -1,3 +1,14 @@
+/*=======================================================
+  FileName: /server/middlewears/auth.ts
+  ProjectName: IntheLoop - Survey 
+  CompanyName: Centennial Collge, Fall 2021
+  Author: Hong, Jiwoong - 301153138
+          Vargas, Joel  - 301161522
+          Zheng, Ziwei  - 301180464
+  Date: 2021-11-26
+  Remarks: Authentication Middlewear
+  ======================================================*/
+
 import passport from "passport";
 import passportLocal, { IVerifyOptions } from 'passport-local';
 import UserModel from '../models/user';

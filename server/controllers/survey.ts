@@ -1,10 +1,13 @@
-/*=============================================
-  FileName: controllers/Survey.ts
-  ProjectName: COMP229-005, Assignment #2
+/*=======================================================
+  FileName: /server/controllers/survey.ts
+  ProjectName: IntheLoop - Survey 
   CompanyName: Centennial Collge, Fall 2021
-  Author: Jiwoong Hong, 301153138
-  Date: 2021-10-22
-  ============================================*/
+  Author: Hong, Jiwoong - 301153138
+          Vargas, Joel  - 301161522
+          Zheng, Ziwei  - 301180464
+  Date: 2021-11-26
+  Remarks: Survey route controller 
+  ======================================================*/
 
 import express from 'express';
 import surveyModel from '../models/survey';
