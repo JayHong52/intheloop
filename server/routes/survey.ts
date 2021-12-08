@@ -10,11 +10,14 @@
   ======================================================*/
 
 import express from 'express';
-import { DisplaySurveyAddPage, DisplaySurveyEditPage, DisplaySurveyListPage, ProcessSurveyAddPage, ProcessSurveyDeletePage, ProcessSurveyEditPage } from '../controllers/survey';
+import { DisplaySurveyAddPage, DisplaySurveyEditPage, DisplaySurveyListPage, DisplaySurveyActivePage, ProcessSurveyAddPage, ProcessSurveyDeletePage, ProcessSurveyEditPage } from '../controllers/survey';
 const router = express.Router();
 
 // Survey-list : DISPLAY 
 router.get('/list', DisplaySurveyListPage);
+
+// Survey-active : DISPLAY 
+router.get('/active', DisplaySurveyActivePage);
 
 // Survey-edit : DISPLAY
 router.get('/edit/:id', DisplaySurveyEditPage);

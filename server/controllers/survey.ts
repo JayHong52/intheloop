@@ -23,9 +23,24 @@ export function DisplaySurveyListPage(req: express.Request, res: express.Respons
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', {title: 'Survey List', page: 'survey/survey-list', survey: intheLoopSurveys, displayName: UserDisplayName(req)})
+        res.render('index-sub', {title: 'Manage Survey', page: 'survey/survey-list', survey: intheLoopSurveys, displayName: UserDisplayName(req)})
         }
     ).sort('name'); 
+};
+
+// ===========================
+//   Survey-list : DISPLAY 
+// ===========================
+export function DisplaySurveyActivePage(req: express.Request, res: express.Response, next: express.NextFunction) {
+    surveyModel.find(
+        function (err, intheLoopSurveys) {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        res.render('index-sub', {title: 'Active Surveys', page: 'survey/survey-active', survey: intheLoopSurveys, displayName: UserDisplayName(req)})
+        }
+    )
 };
 
 // ===========================

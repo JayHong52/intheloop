@@ -25,9 +25,14 @@
         </li>         
         
         <!-- Logged in: Surveys: Active -->
-        <% if ( typeof displayName == 'string' && displayName && title=="Survey List" ) { %>
+        <% if ( typeof displayName == 'string' && displayName && title=="Manage Survey" ) { %>
+        
+        <li class="nav-item">
+        <a class="nav-link" href="/survey/active">ActiveSurveys</a>
+        </li>  
+        
         <li class="nav-item active bg-secondary rounded-3">
-        <a class="nav-link" href="/survey/list">Surveys</a>
+        <a class="nav-link" href="/survey/list">ManageSurveys</a>
         </li>  
 
         <li class="nav-item">
@@ -35,11 +40,15 @@
         </li>
                   
         <!-- Logged in: Surveys: Not Active -->
-        <% } else if ( typeof displayName == 'string' && displayName && title!="Survey List"){ %>
+        <% } else if ( typeof displayName == 'string' && displayName && title!="Manage Survey"){ %>
   
         <li class="nav-item">
-        <a class="nav-link" href="/survey/list">Surveys</a>
-        </li>         
+        <a class="nav-link" href="/survey/active">ActiveSurveys</a>
+        </li>  
+ 
+        <li class="nav-item">
+        <a class="nav-link" href="/survey/list">ManageSurveys</a>
+        </li>    
         
         <li class="nav-item">
         <a class="nav-link" href="/auth/logout"><i class="fas fa-sign-out-alt fa-lg"></i> Logout</a>

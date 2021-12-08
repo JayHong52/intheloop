@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyListPage = void 0;
+exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyActivePage = exports.DisplaySurveyListPage = void 0;
 const survey_1 = __importDefault(require("../models/survey"));
 const utils_1 = require("../utils");
 function DisplaySurveyListPage(req, res, next) {
@@ -12,10 +12,21 @@ function DisplaySurveyListPage(req, res, next) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: 'Survey List', page: 'survey/survey-list', survey: intheLoopSurveys, displayName: (0, utils_1.UserDisplayName)(req) });
+        res.render('index-sub', { title: 'Manage Survey', page: 'survey/survey-list', survey: intheLoopSurveys, displayName: (0, utils_1.UserDisplayName)(req) });
     }).sort('name');
 }
 exports.DisplaySurveyListPage = DisplaySurveyListPage;
+;
+function DisplaySurveyActivePage(req, res, next) {
+    survey_1.default.find(function (err, intheLoopSurveys) {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        res.render('index-sub', { title: 'Active Surveys', page: 'survey/survey-active', survey: intheLoopSurveys, displayName: (0, utils_1.UserDisplayName)(req) });
+    });
+}
+exports.DisplaySurveyActivePage = DisplaySurveyActivePage;
 ;
 function DisplaySurveyEditPage(req, res, next) {
     let id = req.params.id;
