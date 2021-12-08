@@ -20,7 +20,7 @@ function DisplayLogInPage(req, res) {
         if (!req.user) {
             return res.render('index-sub', { title: 'Sign In', page: 'auth/login', messages: req.flash('loginMessage'), displayName: (0, utils_1.UserDisplayName)(req) });
         }
-        return res.redirect('/survey/list');
+        return res.redirect('/survey/manage');
     });
 }
 exports.DisplayLogInPage = DisplayLogInPage;
@@ -29,14 +29,14 @@ function DisplayRegisterPage(req, res, next) {
         if (!req.user) {
             return res.render('index-sub', { title: 'Register', page: 'auth/register', messages: '', displayName: (0, utils_1.UserDisplayName)(req) });
         }
-        return res.redirect('/survey/list');
+        return res.redirect('/survey/manage');
     });
 }
 exports.DisplayRegisterPage = DisplayRegisterPage;
 function ProcessLogInPage(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         passport_1.default.authenticate('login', {
-            successRedirect: '/survey/list',
+            successRedirect: '/survey/active',
             failureRedirect: '/auth/login'
         });
     });

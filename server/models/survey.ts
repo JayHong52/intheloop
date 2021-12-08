@@ -13,15 +13,19 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const surveySchema = new Schema({
+      
+    user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     userName: String,
-    question: String,
+    title: String,
     answer: String,
-    remarks: String
+    remarks: String,
+    active: Boolean,
+    questions: [{question: {type: mongoose.Schema.Types.ObjectId, ref: 'Question'}}]
 },
 {
     collection: "intheLoopSurveys"
 });
 
-const Model = mongoose.model("survey", surveySchema)
+const Model = mongoose.model("Survey", surveySchema)
 
 export default Model

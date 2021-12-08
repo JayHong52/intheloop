@@ -20,7 +20,7 @@ export async function DisplayLogInPage(req: Request, res: Response) {
     if (!req.user) {
         return res.render('index-sub', { title: 'Sign In', page: 'auth/login', messages: req.flash('loginMessage'), displayName: UserDisplayName(req) })
     }
-    return res.redirect('/survey/list');
+    return res.redirect('/survey/manage');
 }
 
 // ==========================
@@ -30,7 +30,7 @@ export async function DisplayRegisterPage(req: Request, res: Response, next: Nex
     if (!req.user) {
         return res.render('index-sub', { title: 'Register', page: 'auth/register', messages: '', displayName: UserDisplayName(req) })
     }
-    return res.redirect('/survey/list');
+    return res.redirect('/survey/manage');
 }
 
 // ==========================
@@ -39,7 +39,7 @@ export async function DisplayRegisterPage(req: Request, res: Response, next: Nex
 export async function ProcessLogInPage(req: Request, res:Response, next: NextFunction) 
 {
     passport.authenticate('login', {
-        successRedirect: '/survey/list', 
+        successRedirect: '/survey/active', 
         failureRedirect: '/auth/login'}); 
 }
 

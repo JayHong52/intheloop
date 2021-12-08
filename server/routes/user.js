@@ -8,7 +8,7 @@ const user_1 = require("../controllers/user");
 const auth_1 = __importDefault(require("../middlewares/auth"));
 const router = (0, express_1.Router)();
 router.get('/login', user_1.DisplayLogInPage);
-router.post('/login', auth_1.default.authenticate('login', { successRedirect: '/survey/list', failureRedirect: '/auth/login' }));
+router.post('/login', auth_1.default.authenticate('login', { successRedirect: '/survey/manage', failureRedirect: '/auth/login' }));
 router.get('/register', user_1.DisplayRegisterPage);
 router.post('/register', user_1.ProcessRegisterPage);
 router.get('/logout', user_1.ProcessLogout);

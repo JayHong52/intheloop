@@ -16,18 +16,18 @@
                   </tr>
                 </thead>
                 <tbody>
-                    <% for (let count = 0; count < survey.length; count++) { %> 
+                    <% for (let count = 0; count < surveyList.length; count++) { %> 
                     <tr>
                         <th scope="row">
                             <%= count + 1 %> 
                         </th>
-                        <td><%= survey[count].userName %> </td>
+                        <td><%= surveyList[count].userName %> </td>
                         <td> Date </td>
 
-                        <td><%= survey[count].question %> </td>
+                        <td><%= surveyList[count].title %> </td>
                         <td class="text-end"> 
-                            <a href="/survey/edit/<%= survey[count]._id %>" class="btn btn-secondary btn-sm edit"><i class="fas fa-edit fa-sm"></i> TakeSurvey </a>
-                            <a href="/survey/edit/<%= survey[count]._id %>" class="btn btn-secondary btn-sm edit"><i class="fas fa-edit fa-sm"></i> ViewResult </a>
+                            <a href="/survey/edit/<%= surveyList[count]._id %>" class="btn btn-secondary btn-sm edit"><i class="fas fa-edit fa-sm"></i> TakeSurvey </a>
+                            <a href="/survey/edit/<%= surveyList[count]._id %>" class="btn btn-dark btn-sm edit"><i class="fas fa-edit fa-sm"></i> ViewResult </a>
                         </td>
                     </tr>
                     <% } %> 

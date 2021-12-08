@@ -3,19 +3,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyActivePage = exports.DisplaySurveyListPage = void 0;
+exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyActivePage = exports.DisplaySurveyManagePage = void 0;
 const survey_1 = __importDefault(require("../models/survey"));
 const utils_1 = require("../utils");
-function DisplaySurveyListPage(req, res, next) {
-    survey_1.default.find(function (err, intheLoopSurveys) {
+function DisplaySurveyManagePage(req, res, next) {
+    survey_1.default.find({ user: req.user }, function (err, intheLoopSurveys) {
         if (err) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: 'Manage Survey', page: 'survey/survey-list', survey: intheLoopSurveys, displayName: (0, utils_1.UserDisplayName)(req) });
-    }).sort('name');
+        res.render('index-sub', { title: 'Manage Your Surveys', page: 'survey/survey-manage', surveyList: intheLoopSurveys, displayName: (0, utils_1.UserDisplayName)(req) });
+    }).sort('date');
 }
-exports.DisplaySurveyListPage = DisplaySurveyListPage;
+exports.DisplaySurveyManagePage = DisplaySurveyManagePage;
 ;
 function DisplaySurveyActivePage(req, res, next) {
     survey_1.default.find(function (err, intheLoopSurveys) {
@@ -23,8 +23,8 @@ function DisplaySurveyActivePage(req, res, next) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: 'Active Surveys', page: 'survey/survey-active', survey: intheLoopSurveys, displayName: (0, utils_1.UserDisplayName)(req) });
-    });
+        res.render('index-sub', { title: 'Active Surveys', page: 'survey/survey-active', surveyList: intheLoopSurveys, displayName: (0, utils_1.UserDisplayName)(req) });
+    }).sort('date');
 }
 exports.DisplaySurveyActivePage = DisplaySurveyActivePage;
 ;
@@ -45,7 +45,7 @@ function ProcessSurveyEditPage(req, res, next) {
     let updatedItem = new survey_1.default({
         "_id": id,
         "userName": req.body.userName,
-        "question": req.body.question,
+        "title": req.body.title,
         "answer": req.body.answer,
         "remarks": req.body.remarks
     });
@@ -54,28 +54,29 @@ function ProcessSurveyEditPage(req, res, next) {
             console.error(err);
             res.end(err);
         }
-        res.redirect('/survey/list');
+        res.redirect('/survey/manage');
     });
 }
 exports.ProcessSurveyEditPage = ProcessSurveyEditPage;
 function DisplaySurveyAddPage(req, res, next) {
-    res.render('index-sub', { title: 'Add Survey', page: 'survey/survey-edit', item: '', displayName: (0, utils_1.UserDisplayName)(req) });
+    res.render('index-sub', { title: 'Create Survey', page: 'survey/survey-create', item: '', displayName: (0, utils_1.UserDisplayName)(req) });
 }
 exports.DisplaySurveyAddPage = DisplaySurveyAddPage;
 function ProcessSurveyAddPage(req, res, next) {
     let newSurvey = new survey_1.default({
-        "userName": req.body.userName,
-        "question": req.body.question,
-        "answer": req.body.answer,
-        "remarks": req.body.remarks
+        "user": req.user,
+        "title": req.body.title,
+        "remarks": req.body.remarks,
+        "active": false
     });
+    let id = newSurvey._id;
     survey_1.default.create(newSurvey, (err) => {
         if (err) {
             console.error(err);
             res.end(err);
         }
         ;
-        res.redirect('/survey/list');
+        res.redirect('/survey/edit/' + id);
     });
 }
 exports.ProcessSurveyAddPage = ProcessSurveyAddPage;
@@ -86,7 +87,7 @@ function ProcessSurveyDeletePage(req, res, next) {
             console.error(err);
             res.end(err);
         }
-        res.redirect('/survey/list');
+        res.redirect('/survey/manage');
     });
 }
 exports.ProcessSurveyDeletePage = ProcessSurveyDeletePage;

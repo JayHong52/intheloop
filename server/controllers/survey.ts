@@ -14,37 +14,42 @@ import surveyModel from '../models/survey';
 import { UserDisplayName } from '../utils';
 
 // ===========================
-//   Survey-list : DISPLAY 
+//   Manage Survey : DISPLAY 
 // ===========================
-export function DisplaySurveyListPage(req: express.Request, res: express.Response, next: express.NextFunction) {
+export function DisplaySurveyManagePage(req: express.Request, res: express.Response, next: express.NextFunction) {
     surveyModel.find(
+        {user: req.user},
         function (err, intheLoopSurveys) {
         if (err) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', {title: 'Manage Survey', page: 'survey/survey-list', survey: intheLoopSurveys, displayName: UserDisplayName(req)})
+        res.render('index-sub', {title: 'Manage Your Surveys', page: 'survey/survey-manage', surveyList: intheLoopSurveys, displayName: UserDisplayName(req)})
         }
-    ).sort('name'); 
+    ).sort('date'); 
 };
 
 // ===========================
-//   Survey-list : DISPLAY 
+//   Active Survey : DISPLAY 
 // ===========================
 export function DisplaySurveyActivePage(req: express.Request, res: express.Response, next: express.NextFunction) {
+    
     surveyModel.find(
-        function (err, intheLoopSurveys) {
+        // uncomment it when you're done working with 
+        //{active: false},
+        function (err, intheLoopSurveys) 
+        {
         if (err) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', {title: 'Active Surveys', page: 'survey/survey-active', survey: intheLoopSurveys, displayName: UserDisplayName(req)})
+        res.render('index-sub', {title: 'Active Surveys', page: 'survey/survey-active', surveyList: intheLoopSurveys, displayName: UserDisplayName(req)})
         }
-    )
+    ).sort('date')
 };
 
 // ===========================
-//   Survey-edit : DISPLAY
+//   Edit Survey : DISPLAY
 // ===========================  
 export function DisplaySurveyEditPage(req: express.Request, res: express.Response, next: express.NextFunction) {
     let id = req.params.id;
@@ -58,14 +63,14 @@ export function DisplaySurveyEditPage(req: express.Request, res: express.Respons
 };
 
 // ===========================
-//   Survey-edit : PROCESS
+//   Edit Survey : PROCESS
 // ===========================
 export function ProcessSurveyEditPage(req: express.Request, res: express.Response, next: express.NextFunction) {
     let id = req.params.id;
     let updatedItem = new surveyModel({
         "_id": id,
         "userName": req.body.userName,
-        "question": req.body.question,
+        "title": req.body.title,
         "answer": req.body.answer,
         "remarks": req.body.remarks
     });
@@ -74,35 +79,37 @@ export function ProcessSurveyEditPage(req: express.Request, res: express.Respons
             console.error(err);
             res.end(err);
         }
-        res.redirect('/survey/list');
+        res.redirect('/survey/manage');
     })
 }
 
 // ====================================
-//   Survey-edit : Create - DISPLAY
+//   Create Survey : DISPLAY
 // ====================================
 export function DisplaySurveyAddPage(req: express.Request, res: express.Response, next: express.NextFunction) {
-    res.render('index-sub', { title: 'Add Survey', page: 'survey/survey-edit', item: '', displayName: UserDisplayName(req) });
+    res.render('index-sub', { title: 'Create Survey', page: 'survey/survey-create', item: '', displayName: UserDisplayName(req) });
 }
 
 // ====================================
-//   Survey-edit : Create - PROCESS 
+//   Create Survey : PROCESS 
 // ====================================
 export function ProcessSurveyAddPage(req: express.Request, res: express.Response, next: express.NextFunction): void {
 
     let newSurvey = new surveyModel({
-        "userName": req.body.userName,
-        "question": req.body.question,
-        "answer": req.body.answer,
-        "remarks": req.body.remarks
+        "user": req.user,
+        "title": req.body.title,
+        "remarks": req.body.remarks,
+        "active": false
     });
+
+    let id = newSurvey._id;
 
     surveyModel.create(newSurvey, (err: any) => {
         if (err) {
             console.error(err);
             res.end(err);
         };
-        res.redirect('/survey/list');
+        res.redirect('/survey/edit/' + id);
     }) 
 }
 
@@ -116,6 +123,6 @@ export function ProcessSurveyDeletePage(req: express.Request, res: express.Respo
             console.error(err);
             res.end(err);
         }
-        res.redirect('/survey/list');
+        res.redirect('/survey/manage');
     })
 }

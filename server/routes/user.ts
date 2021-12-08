@@ -19,7 +19,7 @@ const router = Router();
 router.get('/login', DisplayLogInPage);
 
 // LogIn Page: PROCESS
-router.post('/login', passport.authenticate('login', {successRedirect: '/survey/list', failureRedirect: '/auth/login'}));
+router.post('/login', passport.authenticate('login', {successRedirect: '/survey/manage', failureRedirect: '/auth/login'}));
 
 // Register Page: DISPLAY
 router.get('/register', DisplayRegisterPage);

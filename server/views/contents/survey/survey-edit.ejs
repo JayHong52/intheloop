@@ -24,14 +24,14 @@
             <input 
               type="text" 
               class="form-control" 
-              id="question"
-              name="question" 
-              aria-label="Question"
-              aria-describedby="Question"
+              id="title"
+              name="title" 
+              aria-label="title"
+              aria-describedby="title"
               required
-              value="<%= item.question %>"
-              placeholder="Question">
-              <label class="ms-0" for="phone">Question</label>
+              value="<%= item.title %>"
+              placeholder="title">
+              <label class="ms-0" for="phone">title</label>
             </div>
         
           <div class="form-floating mb-3">
@@ -72,7 +72,7 @@
                                 <i class="fas fa-edit"></i> Update
                             </button>            
                             <!-- Button: Cancel -->
-                            <a href="/survey/list" id="cancelButton" class="btn btn-dark">
+                            <a href="/survey/manage" id="cancelButton" class="btn btn-dark">
                                 <i class="fas fa-undo"></i> Cancel
                             </a>
                         </div>
@@ -93,7 +93,7 @@
                     </button>
                     
                     <!-- Button: Add -->  
-                    <a href="/survey/list" id="cancelButton" class="btn btn-dark">
+                    <a href="/survey/manage" id="cancelButton" class="btn btn-dark">
                         <i class="fas fa-undo">
                     </i> Cancel</a>
 
