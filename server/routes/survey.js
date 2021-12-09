@@ -13,7 +13,7 @@ router.post('/edit/:id', survey_1.ProcessSurveyEditPage);
 router.get('/add', survey_1.DisplaySurveyAddPage);
 router.post('/add', survey_1.ProcessSurveyAddPage);
 router.get('/delete/:id', survey_1.ProcessSurveyDeletePage);
-router.get('/question/:id', survey_1.DisplaySurveyQuestionPage);
-router.post('/question/:id', survey_1.ProcessSurveyQuestionPage);
+router.get('/manage/:id/question/add', survey_1.DisplayQuestionAddPage);
+router.post('/manage/:id/question/add', survey_1.ProcessQuestionAddPage);
 exports.default = router;
 //# sourceMappingURL=survey.js.map

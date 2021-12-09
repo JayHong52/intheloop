@@ -3,8 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProcessSurveyQuestionPage = exports.DisplaySurveyQuestionPage = exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyActivePage = exports.DisplaySurveyManagePage = void 0;
+exports.ProcessQuestionAddPage = exports.DisplayQuestionAddPage = exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyActivePage = exports.DisplaySurveyManagePage = void 0;
 const survey_1 = __importDefault(require("../models/survey"));
+const question_1 = __importDefault(require("../models/question"));
 const utils_1 = require("../utils");
 function DisplaySurveyManagePage(req, res, next) {
     survey_1.default.find({ user: req.user }, function (err, intheLoopSurveys) {
@@ -30,16 +31,15 @@ exports.DisplaySurveyActivePage = DisplaySurveyActivePage;
 ;
 function DisplaySurveyEditPage(req, res, next) {
     let id = req.params.id;
-    survey_1.default.findById(id, {}, {}, (err, SurveyListItemToEdit) => {
+    survey_1.default.findById({ _id: id }).populate('questions').exec(function (err, surveyItem) {
         if (err) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: "Survey Update", page: "survey/survey-edit", item: SurveyListItemToEdit, displayName: (0, utils_1.UserDisplayName)(req) });
+        res.render('index-sub', { title: "Survey Update", page: "survey/survey-edit", item: surveyItem, displayName: (0, utils_1.UserDisplayName)(req) });
     });
 }
 exports.DisplaySurveyEditPage = DisplaySurveyEditPage;
-;
 function ProcessSurveyEditPage(req, res, next) {
     let id = req.params.id;
     let updatedItem = new survey_1.default({
@@ -90,20 +90,46 @@ function ProcessSurveyDeletePage(req, res, next) {
     });
 }
 exports.ProcessSurveyDeletePage = ProcessSurveyDeletePage;
-function DisplaySurveyQuestionPage(req, res, next) {
+function DisplayQuestionAddPage(req, res, next) {
     let id = req.params.id;
-    survey_1.default.findById(id, {}, {}, (err, surveyItem) => {
+    survey_1.default.findOne({ _id: id }, {}, {}, (err, surveyItem) => {
         if (err) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: "Add Survey Questions", page: "survey/survey-question", item: surveyItem, displayName: (0, utils_1.UserDisplayName)(req) });
+        res.render('index-sub', { title: "Add Survey Questions", page: "survey/survey-question-edit", item: surveyItem, displayName: (0, utils_1.UserDisplayName)(req) });
     });
 }
-exports.DisplaySurveyQuestionPage = DisplaySurveyQuestionPage;
-function ProcessSurveyQuestionPage(req, res, next) {
+exports.DisplayQuestionAddPage = DisplayQuestionAddPage;
+function ProcessQuestionAddPage(req, res, next) {
+    let fields = ["option1", "option2", "option3", "option4", "option5"];
+    let options = [];
+    for (let i = 0; i < fields.length; i++) {
+        let option = req.body[fields[i]];
+        if (option != "") {
+            options.push(option);
+        }
+    }
+    let newQuestion = new question_1.default({
+        "question": req.body.question,
+        "options": options
+    });
+    question_1.default.create(newQuestion, (err) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        ;
+    });
     let id = req.params.id;
-    res.redirect('/survey/edit/' + id);
+    survey_1.default.updateOne({ _id: id }, { $push: { questions: newQuestion } }, {}, (err) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        ;
+        res.redirect('/survey/edit/' + id);
+    });
 }
-exports.ProcessSurveyQuestionPage = ProcessSurveyQuestionPage;
+exports.ProcessQuestionAddPage = ProcessQuestionAddPage;
 //# sourceMappingURL=survey.js.map

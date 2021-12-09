@@ -7,14 +7,10 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
 const surveySchema = new Schema({
     user: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'User' },
-    userName: String,
     title: String,
-    answer: String,
     remarks: String,
     active: Boolean,
-    questions: [
-        { question: String, options: [{ option: String }] }
-    ]
+    questions: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: 'Question' }]
 }, {
     collection: "intheLoopSurveys"
 });

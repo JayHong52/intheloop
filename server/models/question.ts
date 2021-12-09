@@ -14,7 +14,7 @@
   
   const questionSchema = new Schema({
       question: String,
-      options: [{option: String}] 
+      options: [ String ]
   },
   {
       collection: "intheLoopQuestions"

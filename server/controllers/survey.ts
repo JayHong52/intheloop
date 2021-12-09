@@ -11,6 +11,7 @@
 
 import express from 'express';
 import surveyModel from '../models/survey';
+import questionModel from '../models/question'
 import { UserDisplayName } from '../utils';
 
 // ===========================
@@ -52,14 +53,23 @@ export function DisplaySurveyActivePage(req: express.Request, res: express.Respo
 // ===========================  
 export function DisplaySurveyEditPage(req: express.Request, res: express.Response, next: express.NextFunction) {
     let id = req.params.id;
-    surveyModel.findById(id, {}, {}, (err, SurveyListItemToEdit) => {
+    
+    surveyModel.findById({ _id: id}).populate('questions').exec( function (err, surveyItem) { 
         if (err) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: "Survey Update", page: "survey/survey-edit", item: SurveyListItemToEdit, displayName: UserDisplayName(req) })
+        res.render('index-sub', { title: "Survey Update", page: "survey/survey-edit", item: surveyItem, displayName: UserDisplayName(req) })
     })
-};
+}    
+    // surveyModel.findById(id, {}, {}, (err, surveyItemToEdit) => {
+    //     if (err) {
+    //         console.error(err);
+    //         res.end(err);
+    //     }
+    //     res.render('index-sub', { title: "Survey Update", page: "survey/survey-edit", item: surveyItemToEdit, displayName: UserDisplayName(req) })
+    // })
+
 
 // ===========================
 //   Edit Survey : PROCESS
@@ -107,7 +117,7 @@ export function ProcessSurveyAddPage(req: express.Request, res: express.Response
             res.end(err);
         };
         res.redirect('/survey/edit/' + id);
-    })
+    });
 }
 
 // ====================================
@@ -126,28 +136,53 @@ export function ProcessSurveyDeletePage(req: express.Request, res: express.Respo
 
 
 // ====================================
-//   Question - Display 
+//   Question Add - Display 
 // ====================================
-export function DisplaySurveyQuestionPage(req: express.Request, res: express.Response, next: express.NextFunction) {
-    let id = req.params.id;
-    surveyModel.findById(id, {}, {}, (err, surveyItem) => {
+export function DisplayQuestionAddPage(req: express.Request, res: express.Response, next: express.NextFunction) {
+    let id = req.params.id
+
+    surveyModel.findOne({ _id: id }, {}, {}, (err, surveyItem) => {
         if (err) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: "Add Survey Questions", page: "survey/survey-question", item: surveyItem, displayName: UserDisplayName(req) })
+        res.render('index-sub', { title: "Add Survey Questions", page: "survey/survey-question-edit", item: surveyItem, displayName: UserDisplayName(req) })
     })
 }
 
 // ====================================
 //   Question: Add - Process 
 // ====================================
-export function ProcessSurveyQuestionPage(req: express.Request, res: express.Response, next: express.NextFunction) {
-    let id = req.params.id;
-    res.redirect('/survey/edit/' + id);
-}
+export function ProcessQuestionAddPage(req: express.Request, res: express.Response, next: express.NextFunction) {
+    // Create Question 
+    let fields = ["option1", "option2", "option3", "option4", "option5"];
+    let options: Array<String> = [];
 
-// if (err) {
-//     console.error(err);
-//     res.end(err);
-// };
+    for (let i = 0; i < fields.length; i++) {
+        let option = req.body[fields[i]];
+        if (option != "") {
+            options.push(option);
+        }
+    }
+
+    let newQuestion = new questionModel({
+        "question": req.body.question,
+        "options": options
+    });
+
+    questionModel.create(newQuestion, (err: any) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        };
+    });
+
+    let id = req.params.id;
+    surveyModel.updateOne({ _id: id }, { $push: { questions: newQuestion }}, {}, (err) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        };
+        res.redirect('/survey/edit/' + id);
+    })
+}
