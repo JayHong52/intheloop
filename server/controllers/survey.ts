@@ -18,32 +18,31 @@ import { UserDisplayName } from '../utils';
 // ===========================
 export function DisplaySurveyManagePage(req: express.Request, res: express.Response, next: express.NextFunction) {
     surveyModel.find(
-        {user: req.user},
+        { user: req.user },
         function (err, intheLoopSurveys) {
-        if (err) {
-            console.error(err);
-            res.end(err);
+            if (err) {
+                console.error(err);
+                res.end(err);
+            }
+            res.render('index-sub', { title: 'Manage Your Surveys', page: 'survey/survey-manage', surveyList: intheLoopSurveys, displayName: UserDisplayName(req) })
         }
-        res.render('index-sub', {title: 'Manage Your Surveys', page: 'survey/survey-manage', surveyList: intheLoopSurveys, displayName: UserDisplayName(req)})
-        }
-    ).sort('date'); 
+    ).sort('date');
 };
 
 // ===========================
 //   Active Survey : DISPLAY 
 // ===========================
 export function DisplaySurveyActivePage(req: express.Request, res: express.Response, next: express.NextFunction) {
-    
+
     surveyModel.find(
         // uncomment it when you're done working with 
         //{active: false},
-        function (err, intheLoopSurveys) 
-        {
-        if (err) {
-            console.error(err);
-            res.end(err);
-        }
-        res.render('index-sub', {title: 'Active Surveys', page: 'survey/survey-active', surveyList: intheLoopSurveys, displayName: UserDisplayName(req)})
+        function (err, intheLoopSurveys) {
+            if (err) {
+                console.error(err);
+                res.end(err);
+            }
+            res.render('index-sub', { title: 'Active Surveys', page: 'survey/survey-active', surveyList: intheLoopSurveys, displayName: UserDisplayName(req) })
         }
     ).sort('date')
 };
@@ -58,7 +57,7 @@ export function DisplaySurveyEditPage(req: express.Request, res: express.Respons
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: "Survey Update", page: "survey/survey-edit", item: SurveyListItemToEdit, displayName: UserDisplayName(req)})
+        res.render('index-sub', { title: "Survey Update", page: "survey/survey-edit", item: SurveyListItemToEdit, displayName: UserDisplayName(req) })
     })
 };
 
@@ -69,9 +68,7 @@ export function ProcessSurveyEditPage(req: express.Request, res: express.Respons
     let id = req.params.id;
     let updatedItem = new surveyModel({
         "_id": id,
-        "userName": req.body.userName,
         "title": req.body.title,
-        "answer": req.body.answer,
         "remarks": req.body.remarks
     });
     surveyModel.updateOne({ _id: id }, updatedItem, {}, (err) => {
@@ -110,7 +107,7 @@ export function ProcessSurveyAddPage(req: express.Request, res: express.Response
             res.end(err);
         };
         res.redirect('/survey/edit/' + id);
-    }) 
+    })
 }
 
 // ====================================
@@ -122,7 +119,35 @@ export function ProcessSurveyDeletePage(req: express.Request, res: express.Respo
         if (err) {
             console.error(err);
             res.end(err);
-        }
+        };
         res.redirect('/survey/manage');
     })
 }
+
+
+// ====================================
+//   Question - Display 
+// ====================================
+export function DisplaySurveyQuestionPage(req: express.Request, res: express.Response, next: express.NextFunction) {
+    let id = req.params.id;
+    surveyModel.findById(id, {}, {}, (err, surveyItem) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        res.render('index-sub', { title: "Add Survey Questions", page: "survey/survey-question", item: surveyItem, displayName: UserDisplayName(req) })
+    })
+}
+
+// ====================================
+//   Question: Add - Process 
+// ====================================
+export function ProcessSurveyQuestionPage(req: express.Request, res: express.Response, next: express.NextFunction) {
+    let id = req.params.id;
+    res.redirect('/survey/edit/' + id);
+}
+
+// if (err) {
+//     console.error(err);
+//     res.end(err);
+// };

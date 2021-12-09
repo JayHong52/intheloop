@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyActivePage = exports.DisplaySurveyManagePage = void 0;
+exports.ProcessSurveyQuestionPage = exports.DisplaySurveyQuestionPage = exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyActivePage = exports.DisplaySurveyManagePage = void 0;
 const survey_1 = __importDefault(require("../models/survey"));
 const utils_1 = require("../utils");
 function DisplaySurveyManagePage(req, res, next) {
@@ -44,9 +44,7 @@ function ProcessSurveyEditPage(req, res, next) {
     let id = req.params.id;
     let updatedItem = new survey_1.default({
         "_id": id,
-        "userName": req.body.userName,
         "title": req.body.title,
-        "answer": req.body.answer,
         "remarks": req.body.remarks
     });
     survey_1.default.updateOne({ _id: id }, updatedItem, {}, (err) => {
@@ -87,8 +85,25 @@ function ProcessSurveyDeletePage(req, res, next) {
             console.error(err);
             res.end(err);
         }
+        ;
         res.redirect('/survey/manage');
     });
 }
 exports.ProcessSurveyDeletePage = ProcessSurveyDeletePage;
+function DisplaySurveyQuestionPage(req, res, next) {
+    let id = req.params.id;
+    survey_1.default.findById(id, {}, {}, (err, surveyItem) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        res.render('index-sub', { title: "Add Survey Questions", page: "survey/survey-question", item: surveyItem, displayName: (0, utils_1.UserDisplayName)(req) });
+    });
+}
+exports.DisplaySurveyQuestionPage = DisplaySurveyQuestionPage;
+function ProcessSurveyQuestionPage(req, res, next) {
+    let id = req.params.id;
+    res.redirect('/survey/edit/' + id);
+}
+exports.ProcessSurveyQuestionPage = ProcessSurveyQuestionPage;
 //# sourceMappingURL=survey.js.map

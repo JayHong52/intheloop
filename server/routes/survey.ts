@@ -10,7 +10,11 @@
   ======================================================*/
 
 import express from 'express';
-import { DisplaySurveyAddPage, DisplaySurveyEditPage, DisplaySurveyManagePage, DisplaySurveyActivePage, ProcessSurveyAddPage, ProcessSurveyDeletePage, ProcessSurveyEditPage } from '../controllers/survey';
+import { DisplaySurveyAddPage, DisplaySurveyEditPage, 
+         DisplaySurveyManagePage, DisplaySurveyActivePage, 
+         ProcessSurveyAddPage, ProcessSurveyDeletePage, ProcessSurveyEditPage, 
+         DisplaySurveyQuestionPage, ProcessSurveyQuestionPage } from '../controllers/survey';
+                  
 const router = express.Router();
 
 // Survey-list : DISPLAY 
@@ -33,6 +37,12 @@ router.post('/add', ProcessSurveyAddPage);
 
 // Survey-edit : Delete - PROCESS 
 router.get('/delete/:id', ProcessSurveyDeletePage);
+
+// Survey Questions: DISPLAY
+router.get('/question/:id', DisplaySurveyQuestionPage);
+
+// Survey Questions: PROCESS
+router.post('/question/:id', ProcessSurveyQuestionPage);
 
 export default router;
 
