@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProcessQuestionAddPage = exports.DisplayQuestionAddPage = exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyActivePage = exports.DisplaySurveyManagePage = void 0;
+exports.ProcessQuestionDeletePage = exports.ProcessQuestionAddPage = exports.DisplayQuestionAddPage = exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyActivePage = exports.DisplaySurveyManagePage = void 0;
 const survey_1 = __importDefault(require("../models/survey"));
 const question_1 = __importDefault(require("../models/question"));
 const utils_1 = require("../utils");
@@ -36,16 +36,23 @@ function DisplaySurveyEditPage(req, res, next) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: "Survey Update", page: "survey/survey-edit", item: surveyItem, displayName: (0, utils_1.UserDisplayName)(req) });
+        res.render('index-sub', { title: "Manage Your Survey", page: "survey/survey-edit", item: surveyItem, displayName: (0, utils_1.UserDisplayName)(req) });
     });
 }
 exports.DisplaySurveyEditPage = DisplaySurveyEditPage;
 function ProcessSurveyEditPage(req, res, next) {
     let id = req.params.id;
+    let activeStatus = req.body.isActive;
+    let isActive = false;
+    if (activeStatus == "active") {
+        isActive = true;
+    }
+    console.log(isActive);
     let updatedItem = new survey_1.default({
         "_id": id,
         "title": req.body.title,
-        "remarks": req.body.remarks
+        "remarks": req.body.remarks,
+        "active": isActive
     });
     survey_1.default.updateOne({ _id: id }, updatedItem, {}, (err) => {
         if (err) {
@@ -65,7 +72,7 @@ function ProcessSurveyAddPage(req, res, next) {
         "user": req.user,
         "title": req.body.title,
         "remarks": req.body.remarks,
-        "active": false
+        "active": false,
     });
     let id = newSurvey._id;
     survey_1.default.create(newSurvey, (err) => {
@@ -74,7 +81,7 @@ function ProcessSurveyAddPage(req, res, next) {
             res.end(err);
         }
         ;
-        res.redirect('/survey/edit/' + id);
+        res.redirect('/survey/manage/' + id);
     });
 }
 exports.ProcessSurveyAddPage = ProcessSurveyAddPage;
@@ -128,8 +135,14 @@ function ProcessQuestionAddPage(req, res, next) {
             res.end(err);
         }
         ;
-        res.redirect('/survey/edit/' + id);
+        res.redirect('/survey/manage/' + id);
     });
 }
 exports.ProcessQuestionAddPage = ProcessQuestionAddPage;
+function ProcessQuestionDeletePage(req, res, next) {
+    let id = req.params.id;
+    let qid = req.params.qid;
+    console.log(qid);
+}
+exports.ProcessQuestionDeletePage = ProcessQuestionDeletePage;
 //# sourceMappingURL=survey.js.map

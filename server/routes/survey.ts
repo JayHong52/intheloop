@@ -13,7 +13,7 @@ import express from 'express';
 import { DisplaySurveyAddPage, DisplaySurveyEditPage, 
          DisplaySurveyManagePage, DisplaySurveyActivePage, 
          ProcessSurveyAddPage, ProcessSurveyDeletePage, ProcessSurveyEditPage, 
-         DisplayQuestionAddPage, ProcessQuestionAddPage } from '../controllers/survey';
+         DisplayQuestionAddPage, ProcessQuestionAddPage, ProcessQuestionDeletePage } from '../controllers/survey';
                   
 const router = express.Router();
 
@@ -24,10 +24,10 @@ router.get('/manage', DisplaySurveyManagePage);
 router.get('/active', DisplaySurveyActivePage);
 
 // Survey-edit : DISPLAY
-router.get('/edit/:id', DisplaySurveyEditPage);
+router.get('/manage/:id', DisplaySurveyEditPage);
 
 // Survey-edit : PROCESS
-router.post('/edit/:id', ProcessSurveyEditPage);
+router.post('/manage/:id', ProcessSurveyEditPage);
   
 // Survey-edit : Create - DISPLAY
 router.get('/add', DisplaySurveyAddPage);
@@ -43,6 +43,9 @@ router.get('/manage/:id/question/add', DisplayQuestionAddPage);
 
 // Survey Questions: PROCESS
 router.post('/manage/:id/question/add', ProcessQuestionAddPage);
+
+// Survey Questions: Delete 
+router.get('/manage/:id/question/delete/:qid', ProcessQuestionDeletePage)
 
 export default router;
 

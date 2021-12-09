@@ -5,7 +5,7 @@
       <h1 class="p-3">
         <%= title %>
       </h1>
-      
+
       <!-- Survey Title -->
       <div class="form-floating mb-3">
         <input type="text" class="form-control" id="title" name="title" aria-label="title" aria-describedby="title"
@@ -20,8 +20,17 @@
         <label class="ms-0" for="remarks">brief description of your Survey</label>
       </div>
 
+      <div>
+        <select class="form-select form-select-lg mb-3" id="isActive" name="isActive" aria-label="isActive">
+          <option selected>Survey Status</option>
+          <option value="active">Active</option>
+          <option value="notActive">Not Active</option>
+        </select>
+      </div>
+
       <!-- Questionaires -->
-      <hr> <!-------------------------------------------------------------------------------------->
+      <hr>
+      <!-------------------------------------------------------------------------------------->
       <b>Questionaires</b>
 
       <table class="table">
@@ -29,72 +38,72 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Question</th>
-            <th scope="col">Options</th>
             <th scope="col" class="text-end">
               <a href="/survey/manage/<%= item._id %>/question/add " id="addButton" class="btn btn-dark btn-sm mb-1"><i
                   class="fas fa-plus-circle"></i> Add Question</a>
             </th>
           </tr>
         </thead>
-      
-      <!-- Survey with no Questions -->  
-      <% if (item.questions.length == 0) { %>
-        
-       <tbody>
-        <tr>
-          <td class="text-center" colspan=4>
-            Your survey is empty!
-          </td>
-        </tr>
-       </tbody> 
-      
-      <% } else { %> 
-      
-        <tbody>
-          <% for (let i = 0; i < item.questions.length ; i++) { %> 
-          <tr>
-              <th scope="row">
-                <%= i + 1 %> 
-              </th>
-              <td>
-                <%= item.questions[i].question %> 
+
+        <!-- Survey with no Questions -->
+        <% if (item.questions.length == 0) { %>
+
+          <tbody>
+            <tr>
+              <td class="text-center" colspan=4>
+                Your survey is empty!
               </td>
-              <td>
-                <%= item.questions[i].options.length %> 
-              </td>
-              <td class="text-end"> 
-                button
-              </td>
-          </tr>
-          
-          <% } %> 
-      
-        </tbody> 
-    
-      <% } %> 
-    
-    </table>
-    <hr> <!-------------------------------------------------------------------------------------->
-        <!-- Buttons (Update, Cancel, Delete) -->
-        <div class="row">
-          <div class="col-lg-6 col-md-6 col-sm-12">
-            <!-- Button: Update -->
-            <button type="submit" id="submitButton" class="btn btn-secondary">
-              <i class="fas fa-edit"></i> Update
-            </button>
-            <!-- Button: Cancel -->
-            <a href="/survey/manage" id="cancelButton" class="btn btn-dark">
-              <i class="fas fa-undo"></i> Cancel
-            </a>
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-12 text-end">
-            <!-- Button: Delete -->
-            <a href="/survey/delete/<%= item._id %>" id="deleteButton" class="btn btn-danger">
-              <i class="fas fa-trash-alt"></i> Delete
-            </a>
-          </div>
+            </tr>
+          </tbody>
+
+          <% } else { %>
+
+            <tbody>
+              <% for (let i=0; i < item.questions.length ; i++) { %>
+                <tr>
+                  <th scope="row">
+                    <%= i + 1 %>
+                  </th>
+                  <td>
+                    <%= item.questions[i].question %>
+                  </td>
+                  <td class="text-end">
+                    <!-- Button: Delete -->
+                    <a href="/survey/manage/<%= item._id %>/question/delete/<%= item.questions[i]._id %>" 
+                      id="modifyButton" class="btn btn-sm btn-secondary"> modify </a>
+                    <a href="/survey/manage/<%= item._id %>/question/delete/<%= item.questions[i]._id %>" 
+                      id="deleteButton" class="btn btn-sm btn-danger"> delete </a>
+                  </td>
+                </tr>
+
+                <% } %>
+
+            </tbody>
+
+            <% } %>
+
+      </table>
+      <!-------------------------------------------------------------------------------------->
+      <!-- Buttons (Update, Cancel, Delete) -->
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12">
+          <!-- Button: Update -->
+          <button type="submit" id="submitButton" class="btn btn-secondary">
+            <i class="fas fa-edit"></i> Update
+          </button>
+          <!-- Button: Cancel -->
+          <a href="/survey/manage" id="cancelButton" class="btn btn-dark">
+            <i class="fas fa-undo"></i> Cancel
+          </a>
         </div>
-  </form>
+        <div class="col-lg-6 col-md-6 col-sm-12 text-end">
+          <!-- Button: Delete -->
+          <a href="/survey/delete/<%= item._id %>" id="deleteButton" class="btn btn-danger">
+            <i class="fas fa-trash-alt"></i> DeleteSurvey
+          </a>
+        </div>
+      </div>
+    </form>
   </div>
   <div class="col-lg-3 col-md-1 col-sm-12"></div>
 

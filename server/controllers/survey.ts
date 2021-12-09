@@ -13,9 +13,13 @@ import express from 'express';
 import surveyModel from '../models/survey';
 import questionModel from '../models/question'
 import { UserDisplayName } from '../utils';
+import { getSystemErrorMap } from 'util';
+import { Console, timeStamp } from 'console';
+import { now } from 'mongoose';
+import { brotliDecompressSync } from 'zlib';
 
 // ===========================
-//   Manage Survey : DISPLAY 
+//   Manage Survey List : DISPLAY 
 // ===========================
 export function DisplaySurveyManagePage(req: express.Request, res: express.Response, next: express.NextFunction) {
     surveyModel.find(
@@ -31,7 +35,7 @@ export function DisplaySurveyManagePage(req: express.Request, res: express.Respo
 };
 
 // ===========================
-//   Active Survey : DISPLAY 
+//   Active Survey List : DISPLAY 
 // ===========================
 export function DisplaySurveyActivePage(req: express.Request, res: express.Response, next: express.NextFunction) {
 
@@ -59,27 +63,30 @@ export function DisplaySurveyEditPage(req: express.Request, res: express.Respons
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: "Survey Update", page: "survey/survey-edit", item: surveyItem, displayName: UserDisplayName(req) })
+        res.render('index-sub', { title: "Manage Your Survey", page: "survey/survey-edit", item: surveyItem, displayName: UserDisplayName(req) })
     })
 }    
-    // surveyModel.findById(id, {}, {}, (err, surveyItemToEdit) => {
-    //     if (err) {
-    //         console.error(err);
-    //         res.end(err);
-    //     }
-    //     res.render('index-sub', { title: "Survey Update", page: "survey/survey-edit", item: surveyItemToEdit, displayName: UserDisplayName(req) })
-    // })
-
 
 // ===========================
 //   Edit Survey : PROCESS
 // ===========================
 export function ProcessSurveyEditPage(req: express.Request, res: express.Response, next: express.NextFunction) {
-    let id = req.params.id;
+    
+    let id = req.params.id
+    let activeStatus = req.body.isActive
+    let isActive = false;
+
+    if (activeStatus == "active") {
+        isActive = true;
+    }
+
+    console.log(isActive);
+
     let updatedItem = new surveyModel({
         "_id": id,
         "title": req.body.title,
-        "remarks": req.body.remarks
+        "remarks": req.body.remarks,
+        "active": isActive
     });
     surveyModel.updateOne({ _id: id }, updatedItem, {}, (err) => {
         if (err) {
@@ -106,7 +113,7 @@ export function ProcessSurveyAddPage(req: express.Request, res: express.Response
         "user": req.user,
         "title": req.body.title,
         "remarks": req.body.remarks,
-        "active": false
+        "active": false,
     });
 
     let id = newSurvey._id;
@@ -116,12 +123,12 @@ export function ProcessSurveyAddPage(req: express.Request, res: express.Response
             console.error(err);
             res.end(err);
         };
-        res.redirect('/survey/edit/' + id);
+        res.redirect('/survey/manage/' + id);
     });
 }
 
 // ====================================
-//   Survey-edit : Delete - PROCESS 
+//   Survey : Delete - PROCESS 
 // ====================================
 export function ProcessSurveyDeletePage(req: express.Request, res: express.Response, next: express.NextFunction) {
     let id = req.params.id;
@@ -183,6 +190,31 @@ export function ProcessQuestionAddPage(req: express.Request, res: express.Respon
             console.error(err);
             res.end(err);
         };
-        res.redirect('/survey/edit/' + id);
+        res.redirect('/survey/manage/' + id);
     })
+}
+
+// ====================================
+//   Question: Delete - Process 
+// ====================================
+
+export function ProcessQuestionDeletePage(req: express.Request, res: express.Response, next: express.NextFunction){
+    let id = req.params.id;
+    let qid = req.params.qid;
+
+    // questionModel.remove({ _id: qid }, (err) => {
+    //     if (err) {
+    //         console.error(err);
+    //         res.end(err);
+    //     };
+    // })
+
+    // surveyModel.updateOne({ _id: id }, { $pullAll: { questions: qid }}, {}, (err) => {
+    //     if (err) {
+    //         console.error(err);
+    //         res.end(err);
+    //     };
+        // res.redirect('/survey/manage/' + id);
+    // })
+    console.log(qid);
 }
