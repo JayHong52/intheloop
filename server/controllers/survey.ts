@@ -270,4 +270,5 @@ export function ProcessTakeSurvey(req: express.Request, res: express.Response, n
 
 export function DisplaySurveyResultPage(req: express.Request, res: express.Response, next: express.NextFunction) {
 
+    res.render('index-sub', { title: "", page: "survey/survey-result", item: "", displayName: UserDisplayName(req) })
 }

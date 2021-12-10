@@ -183,6 +183,7 @@ function ProcessTakeSurvey(req, res, next) {
 }
 exports.ProcessTakeSurvey = ProcessTakeSurvey;
 function DisplaySurveyResultPage(req, res, next) {
+    res.render('index-sub', { title: "", page: "survey/survey-result", item: "", displayName: (0, utils_1.UserDisplayName)(req) });
 }
 exports.DisplaySurveyResultPage = DisplaySurveyResultPage;
 //# sourceMappingURL=survey.js.map
