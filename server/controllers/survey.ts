@@ -11,8 +11,8 @@
 
 import express from 'express';
 import surveyModel from '../models/survey';
-import surveyAnswerModel from '../models/survey_answer';
-import questionModel from '../models/question' 
+import questionModel from '../models/question'; 
+import optionModel from '../models/option';
 import { UserDisplayName } from '../utils';
 import { findSourceMap } from 'module';
 import { Mongoose } from 'mongoose';
@@ -143,6 +143,7 @@ export function ProcessSurveyDeletePage(req: express.Request, res: express.Respo
 // ====================================
 export function DisplayQuestionAddPage(req: express.Request, res: express.Response, next: express.NextFunction) {
     let id = req.params.id
+    let qid = req.params.qid
 
     surveyModel.findOne({ _id: id }, {}, {}, (err, surveyItem) => {
         if (err) {
@@ -157,20 +158,24 @@ export function DisplayQuestionAddPage(req: express.Request, res: express.Respon
 //   Question: ADD - Process 
 // ====================================
 export function ProcessQuestionAddPage(req: express.Request, res: express.Response, next: express.NextFunction) {
+    let id = req.params.id;
+    let qid = req.params.qid;
+
     // Create Question 
     let fields = ["option1", "option2", "option3", "option4", "option5"];
-    let optionTexts: Array<String> = [];
-    let options: Array<String> = [];
+    let questionText = req.body.question;
+    let options = [];
 
     for (let i = 0; i < fields.length; i++) {
-        let option = req.body[fields[i]];
-        if (option != "") {
-            optionTexts.push(option);
+        let optionText = req.body[fields[i]];
+        if (optionText != "") {
+            let option = new optionModel({"optionText": optionText, "answerCount": 0});
+            options.push(option);
         }
     }
 
     let newQuestion = new questionModel({
-        "question": req.body.question,
+        "question": questionText,
         "options": options
     });
 
@@ -181,7 +186,6 @@ export function ProcessQuestionAddPage(req: express.Request, res: express.Respon
         };
     });
 
-    let id = req.params.id;
     surveyModel.updateOne({ _id: id }, { $push: { questions: newQuestion }}, {}, (err) => {
         if (err) {
             console.error(err);
@@ -190,6 +194,32 @@ export function ProcessQuestionAddPage(req: express.Request, res: express.Respon
         res.redirect('/survey/manage/' + id);
     })
 }
+
+// ====================================
+//   Question: MODIFY - Display 
+// ====================================
+
+export function DisplayQuestionEditPage(req: express.Request, res: express.Response, next: express.NextFunction) {
+    let id = req.params.id;
+    let qid = req.params.qid;
+    
+    surveyModel.findById({ _id: id}).populate('questions').exec( function (err, surveyItem) { 
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        res.render('index-sub', { title: "Modify Survey Questions", page: "survey/survey-question-edit", item: surveyItem, displayName: UserDisplayName(req) })
+    })
+}    
+
+// ====================================
+//   Question: MODIFY - Process 
+// ====================================
+
+export function ProcessQuestionEditPage (req: express.Request, res: express.Response, next: express.NextFunction) {
+
+}
+
 
 // ====================================
 //   Question: DELETE - Process 
@@ -248,21 +278,6 @@ export function ProcessTakeSurvey(req: express.Request, res: express.Response, n
     }
 
     console.log(answers);
-
-    let surveyAnswer = new surveyAnswerModel({
-        "user": req.user,
-        "survey": id,
-        "answers": answers
-    })
-    console.log(surveyAnswer);
-
-    surveyAnswerModel.create(surveyAnswer, (err: any) => {
-        if (err) {
-            console.error(err);
-            res.end(err);
-        };
-        res.redirect('/survey/active');
-    });
 }    
 
 // ====================================

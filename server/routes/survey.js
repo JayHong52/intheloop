@@ -18,6 +18,8 @@ router.post('/take/:id', survey_1.ProcessTakeSurvey);
 router.get('/result/:id', survey_1.DisplaySurveyResultPage);
 router.get('/manage/:id/question/add', survey_1.DisplayQuestionAddPage);
 router.post('/manage/:id/question/add', survey_1.ProcessQuestionAddPage);
+router.get('/manage/:id/question/edit/:qid', survey_1.DisplayQuestionEditPage);
+router.post('/manage/:id/question/edit/:qid', survey_1.ProcessQuestionEditPage);
 router.get('/manage/:id/question/delete/:qid', survey_1.ProcessQuestionDeletePage);
 exports.default = router;
 //# sourceMappingURL=survey.js.map

@@ -5,12 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
-const surveyAnswerSchema = new Schema({
+const surveyOptionSchema = new Schema({
     optionText: String,
     answerCount: Number
 }, {
     collection: "intheLoopOptions"
 });
-const Model = mongoose_1.default.model("Option", surveyAnswerSchema);
+const Model = mongoose_1.default.model("Option", surveyOptionSchema);
 exports.default = Model;
 //# sourceMappingURL=option.js.map

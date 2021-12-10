@@ -12,7 +12,7 @@
   import mongoose from 'mongoose';
   const Schema = mongoose.Schema;
   
-  const surveyAnswerSchema = new Schema({    
+  const surveyOptionSchema = new Schema({    
       optionText: String,  
       answerCount: Number
   },
@@ -20,6 +20,6 @@
       collection: "intheLoopOptions"
   });
   
-  const Model = mongoose.model("Option", surveyAnswerSchema)
+  const Model = mongoose.model("Option", surveyOptionSchema)
   
   export default Model
