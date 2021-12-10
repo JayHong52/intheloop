@@ -32,14 +32,14 @@
                 <div class="jumbotron bg-light mt-5 p-5 text-center">
                     <h6> Question #<%= i + 1 %></h6>
                     <!-- Question Goes Here -->
-                    <h1 class="display-6"> <%= item.questions[i].question %> </h1>
+                    <h1 class="display-6" name="q<%= i + 1 %>"> <%= item.questions[i].question %> </h1>
                     <hr>
                     <select class="form-select text-center" name="answer<%= i + 1 %>" aria-label="size 3 select example">
                     
                     <!-- Option Populates -->
                     <% for (let opt = 0; opt < item.questions[i].options.length; opt++) { %> 
 
-                    <option value="<%= item.questions[i].options[opt] %>"> <%= item.questions[i].options[opt] %> </option>
+                    <option name="q<%= i + 1 %>o<%= opt + 1 %>"value="<%= item.questions[i].options[opt] %>"> <%= item.questions[i].options[opt] %> </option>
                     
                     <% } %> 
 
