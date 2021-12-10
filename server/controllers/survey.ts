@@ -11,15 +11,13 @@
 
 import express from 'express';
 import surveyModel from '../models/survey';
-import questionModel from '../models/question'
+import surveyAnswerModel from '../models/surveyAnswer';
+import questionModel from '../models/question' 
 import { UserDisplayName } from '../utils';
-import { getSystemErrorMap } from 'util';
-import { Console, timeStamp } from 'console';
-import { now } from 'mongoose';
-import { brotliDecompressSync } from 'zlib';
+import { findSourceMap } from 'module';
 
 // ===========================
-//   Manage Survey List : DISPLAY 
+//  Manage Survey List : DISPLAY 
 // ===========================
 export function DisplaySurveyManagePage(req: express.Request, res: express.Response, next: express.NextFunction) {
     surveyModel.find(
@@ -40,8 +38,7 @@ export function DisplaySurveyManagePage(req: express.Request, res: express.Respo
 export function DisplaySurveyActivePage(req: express.Request, res: express.Response, next: express.NextFunction) {
 
     surveyModel.find(
-        // uncomment it when you're done working with 
-        //{active: false},
+        { active: true },
         function (err, intheLoopSurveys) {
             if (err) {
                 console.error(err);
@@ -80,15 +77,10 @@ export function ProcessSurveyEditPage(req: express.Request, res: express.Respons
         isActive = true;
     }
 
-    console.log(isActive);
+    let title = req.body.title
+    let remarks = req.body.remarks
 
-    let updatedItem = new surveyModel({
-        "_id": id,
-        "title": req.body.title,
-        "remarks": req.body.remarks,
-        "active": isActive
-    });
-    surveyModel.updateOne({ _id: id }, updatedItem, {}, (err) => {
+    surveyModel.updateOne({ _id: id }, {title: title, remarks: remarks, active: isActive}, {}, (err) => {
         if (err) {
             console.error(err);
             res.end(err);
@@ -128,7 +120,7 @@ export function ProcessSurveyAddPage(req: express.Request, res: express.Response
 }
 
 // ====================================
-//   Survey : Delete - PROCESS 
+//   Delete Survey - PROCESS 
 // ====================================
 export function ProcessSurveyDeletePage(req: express.Request, res: express.Response, next: express.NextFunction) {
     let id = req.params.id;
@@ -143,7 +135,7 @@ export function ProcessSurveyDeletePage(req: express.Request, res: express.Respo
 
 
 // ====================================
-//   Question Add - Display 
+//   Question: ADD - Display 
 // ====================================
 export function DisplayQuestionAddPage(req: express.Request, res: express.Response, next: express.NextFunction) {
     let id = req.params.id
@@ -158,7 +150,7 @@ export function DisplayQuestionAddPage(req: express.Request, res: express.Respon
 }
 
 // ====================================
-//   Question: Add - Process 
+//   Question: ADD - Process 
 // ====================================
 export function ProcessQuestionAddPage(req: express.Request, res: express.Response, next: express.NextFunction) {
     // Create Question 
@@ -195,7 +187,7 @@ export function ProcessQuestionAddPage(req: express.Request, res: express.Respon
 }
 
 // ====================================
-//   Question: Delete - Process 
+//   Question: DELETE - Process 
 // ====================================
 
 export function ProcessQuestionDeletePage(req: express.Request, res: express.Response, next: express.NextFunction){
@@ -217,4 +209,19 @@ export function ProcessQuestionDeletePage(req: express.Request, res: express.Res
         // res.redirect('/survey/manage/' + id);
     // })
     console.log(qid);
+}
+
+// ====================================
+//   Take Survey: - DISPLAY 
+// ====================================
+
+export function DisplayTakeSurvey(req: express.Request, res: express.Response, next: express.NextFunction){
+    let id = req.params.id
+    surveyModel.findById({ _id: id}).populate('questions').exec( function (err, surveyItem) { 
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        res.render('index-sub', { title: surveyItem.title , page: "survey/survey-take", item: surveyItem, displayName: UserDisplayName(req) })
+    })
 }

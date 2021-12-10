@@ -1,0 +1,50 @@
+<div class="container">
+
+    <%= item.title %> 
+
+    <form method="POST">
+            <!-- ============================================================================================ -->
+            <!-- =============                         LOOPING!!!!!!!                        ================ -->            
+            <!-- ============================================================================================ -->
+            
+            <% for( let i = 0; i < item.questions.length; i++ ) { %>
+        <div class="row">
+            <div class="col-lg-3 col-md-1 col-sm-12"></div>
+            <div class="col-lg-6 col-md-10 col-sm-12">
+
+                <div class="jumbotron bg-light mt-5 p-5 text-center">
+                    <h6> Question #<%= i + 1 %></h6>
+                    <!-- Question Goes Here -->
+                    <h1 class="display-6"> <%= item.questions[i].question %> </h1>
+                    <hr>
+                    <select class="form-select text-center " name="answer<%= i + 1 %>" aria-label="size 3 select example">
+                    
+                    <!-- Option Populates -->
+                    <% for (let opt = 0; opt < item.questions[i].options.length; opt++) { %> 
+
+                    <option value="<%= item.questions[i].options[opt] %>"> <%= item.questions[i].options[opt] %> </option>
+                    
+                    <% } %> 
+
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-1 col-sm-12"></div>
+        </div>
+
+        <% } %> 
+            <!-- ============================================================================================ -->
+            <!-- =============                         LOOPED !!!!!!!                        ================ -->            
+            <!-- ============================================================================================ -->
+        <div class="row">
+            <div class="col-lg-3 col-md-1 col-sm-12"></div>
+
+            <div class="col-lg-6 col-md-10 col-sm-12 text-center p-5 my-5">
+                <h1 class="display-6"> Thank you for your time!</h1>
+                <button tpye="submit" class="btn btn-secondary">Submit Answers</a>
+            </div>
+            <div class="col-lg-3 col-md-1 col-sm-12"></div>
+        </div>
+
+    </form>
+</div>
