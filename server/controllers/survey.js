@@ -109,11 +109,12 @@ function DisplayQuestionAddPage(req, res, next) {
 exports.DisplayQuestionAddPage = DisplayQuestionAddPage;
 function ProcessQuestionAddPage(req, res, next) {
     let fields = ["option1", "option2", "option3", "option4", "option5"];
+    let optionTexts = [];
     let options = [];
     for (let i = 0; i < fields.length; i++) {
         let option = req.body[fields[i]];
         if (option != "") {
-            options.push(option);
+            optionTexts.push(option);
         }
     }
     let newQuestion = new question_1.default({
@@ -141,6 +142,21 @@ exports.ProcessQuestionAddPage = ProcessQuestionAddPage;
 function ProcessQuestionDeletePage(req, res, next) {
     let id = req.params.id;
     let qid = req.params.qid;
+    survey_1.default.updateOne({ _id: id }, { $pullAll: { questions: [{ _id: qid }] } }, {}, (err) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        ;
+        res.redirect('/survey/manage/' + id);
+    });
+    question_1.default.deleteOne({ _id: qid }, (err) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        ;
+    });
     console.log(qid);
 }
 exports.ProcessQuestionDeletePage = ProcessQuestionDeletePage;

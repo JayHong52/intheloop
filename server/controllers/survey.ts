@@ -159,12 +159,13 @@ export function DisplayQuestionAddPage(req: express.Request, res: express.Respon
 export function ProcessQuestionAddPage(req: express.Request, res: express.Response, next: express.NextFunction) {
     // Create Question 
     let fields = ["option1", "option2", "option3", "option4", "option5"];
+    let optionTexts: Array<String> = [];
     let options: Array<String> = [];
 
     for (let i = 0; i < fields.length; i++) {
         let option = req.body[fields[i]];
         if (option != "") {
-            options.push(option);
+            optionTexts.push(option);
         }
     }
 
@@ -198,20 +199,20 @@ export function ProcessQuestionDeletePage(req: express.Request, res: express.Res
     let id = req.params.id;
     let qid = req.params.qid;
 
-    // questionModel.remove({ _id: qid }, (err) => {
-    //     if (err) {
-    //         console.error(err);
-    //         res.end(err);
-    //     };
-    // })
+    surveyModel.updateOne({ _id: id }, { $pullAll: { questions: [{ _id: qid }]}}, {}, (err) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        };
+        res.redirect('/survey/manage/' + id);
+    })
 
-    // surveyModel.updateOne({ _id: id }, { $pullAll: { questions: qid }}, {}, (err) => {
-    //     if (err) {
-    //         console.error(err);
-    //         res.end(err);
-    //     };
-        // res.redirect('/survey/manage/' + id);
-    // })
+    questionModel.deleteOne({ _id: qid }, (err) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        };
+    })
     console.log(qid);
 }
 

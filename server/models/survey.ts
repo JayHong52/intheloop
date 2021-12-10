@@ -19,9 +19,7 @@ const surveySchema = new Schema({
     remarks: String,
     date: Date,
     active: Boolean,
-    //questions: [ { question: String, options: [ String ] } ]
-    questions: [ {type: mongoose.Schema.Types.ObjectId, ref: 'Question'},
-  ]
+    questions: [ {type: mongoose.Schema.Types.ObjectId, ref: 'Question'} ]
 },
 {
     collection: "intheLoopSurveys"
