@@ -1,7 +1,4 @@
 <div class="container">
-
-    <%= item.title %> 
-
     <form method="POST">
 
             <!-- When there' no questions to answer -->
@@ -39,7 +36,7 @@
                     <!-- Option Populates -->
                     <% for (let opt = 0; opt < item.questions[i].options.length; opt++) { %> 
 
-                    <option name="q<%= i + 1 %>o<%= opt + 1 %>"value="<%= item.questions[i].options[opt].text %>"> <%= item.questions[i].options[opt].text %> </option>
+                    <option name="q<%= i + 1 %>o<%= opt + 1 %>"value="<%= item.questions[i].options[opt].optionText %>"> <%= item.questions[i].options[opt].optionText %> </option>
                     
                     <% } %> 
 

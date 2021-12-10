@@ -104,7 +104,8 @@ function DisplayQuestionAddPage(req, res, next) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: "Add Survey Questions", page: "survey/survey-question-edit", item: surveyItem, displayName: (0, utils_1.UserDisplayName)(req) });
+        let values = ["", "", "", "", ""];
+        res.render('index-sub', { values: values, title: "Add Survey Questions", page: "survey/survey-question-edit", item: surveyItem, displayName: (0, utils_1.UserDisplayName)(req) });
     });
 }
 exports.DisplayQuestionAddPage = DisplayQuestionAddPage;
@@ -119,6 +120,13 @@ function ProcessQuestionAddPage(req, res, next) {
         if (optionText != "") {
             let option = new option_1.default({ "optionText": optionText, "answerCount": 0 });
             options.push(option);
+            option_1.default.create(option, (err) => {
+                if (err) {
+                    console.error(err);
+                    res.end(err);
+                }
+                ;
+            });
         }
     }
     let newQuestion = new question_1.default({
@@ -132,6 +140,7 @@ function ProcessQuestionAddPage(req, res, next) {
         }
         ;
     });
+    console.log(newQuestion);
     survey_1.default.updateOne({ _id: id }, { $push: { questions: newQuestion } }, {}, (err) => {
         if (err) {
             console.error(err);
@@ -145,18 +154,27 @@ exports.ProcessQuestionAddPage = ProcessQuestionAddPage;
 function DisplayQuestionEditPage(req, res, next) {
     let id = req.params.id;
     let qid = req.params.qid;
-    survey_1.default.findById({ _id: id }).populate('questions').exec(function (err, surveyItem) {
+    question_1.default.findById({ _id: qid }).populate('options').exec(function (err, questionItem) {
         if (err) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: "Modify Survey Questions", page: "survey/survey-question-edit", item: surveyItem, displayName: (0, utils_1.UserDisplayName)(req) });
+        console.log(questionItem);
+        let values = ["", "", "", "", ""];
+        res.render('index-sub', {
+            values: values,
+            title: "Modify Survey Questions", page: "survey/survey-question-edit", item: questionItem,
+            displayName: (0, utils_1.UserDisplayName)(req),
+        });
     });
 }
 exports.DisplayQuestionEditPage = DisplayQuestionEditPage;
 function ProcessQuestionEditPage(req, res, next) {
+    let id = req.params.id;
+    res.redirect('/survey/manage/' + id);
 }
 exports.ProcessQuestionEditPage = ProcessQuestionEditPage;
+let values = ["", "", "", "", ""];
 function ProcessQuestionDeletePage(req, res, next) {
     let id = req.params.id;
     let qid = req.params.qid;
@@ -180,26 +198,26 @@ function ProcessQuestionDeletePage(req, res, next) {
 exports.ProcessQuestionDeletePage = ProcessQuestionDeletePage;
 function DisplayTakeSurvey(req, res, next) {
     let id = req.params.id;
-    survey_1.default.findById({ _id: id }).populate('questions').exec(function (err, surveyItem) {
+    survey_1.default.findById({ _id: id }).populate('questions').
+        populate({
+        path: 'questions',
+        populate: {
+            path: 'options',
+            model: 'Option'
+        }
+    }).
+        exec(function (err, surveyItem) {
         if (err) {
             console.error(err);
             res.end(err);
         }
+        console.log(surveyItem);
         res.render('index-sub', { title: surveyItem.title, page: "survey/survey-take", item: surveyItem, displayName: (0, utils_1.UserDisplayName)(req) });
     });
 }
 exports.DisplayTakeSurvey = DisplayTakeSurvey;
 function ProcessTakeSurvey(req, res, next) {
-    let id = req.params.id;
-    let fields = ["answer1", "answer2", "answer3", "answer4", "answer5"];
-    let answers = [];
-    for (let i = 0; i < fields.length; i++) {
-        if (req.body[fields[i]] != null) {
-            let answer = req.body[fields[i]];
-            answers.push(answer);
-        }
-    }
-    console.log(answers);
+    console.log();
 }
 exports.ProcessTakeSurvey = ProcessTakeSurvey;
 function DisplaySurveyResultPage(req, res, next) {
