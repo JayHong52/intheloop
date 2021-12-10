@@ -14,7 +14,7 @@ import { DisplaySurveyAddPage, DisplaySurveyEditPage,
          DisplaySurveyManagePage, DisplaySurveyActivePage, 
          ProcessSurveyAddPage, ProcessSurveyDeletePage, ProcessSurveyEditPage, 
          DisplayQuestionAddPage, ProcessQuestionAddPage, ProcessQuestionDeletePage, 
-         DisplayTakeSurvey, ProcessTakeSurvey } from '../controllers/survey';
+         DisplayTakeSurvey, ProcessTakeSurvey, DisplaySurveyResultPage } from '../controllers/survey';
                   
 const router = express.Router();
 
@@ -46,6 +46,12 @@ router.get('/delete/:id', ProcessSurveyDeletePage);
 router.get('/take/:id', DisplayTakeSurvey);
 
 router.post('/take/:id', ProcessTakeSurvey);
+
+/* =========================================================================== */
+/*  See Results
+/* =========================================================================== */
+
+router.get('/result/:id', DisplaySurveyResultPage);
 
 /* =========================================================================== */
 /*  Questions 

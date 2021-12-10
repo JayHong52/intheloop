@@ -8,10 +8,10 @@
                 <thead>
                   <tr>
                     <th class="text-center" scope="col">#</th>
+                    <th class="text-center" scope="col" colspan="2">Title</th>
                     <th class="text-center" scope="col">PostedBy</th>
                     <th class="text-center" scope="col">PostedDate</th>
                     <th class="text-center" scope="col">Questions</th>
-                    <th class="text-center" scope="col" colspan="2">Title</th>
                     </th>
                   </tr>
                 </thead>
@@ -21,13 +21,12 @@
                         <th class=" text-center" scope="row">
                             <%= count + 1 %> 
                         </th>
+                        <td class=> <%= surveyList[count].title %> </td>
                         <td class="text-center"> <%= surveyList[count].user.username %> </td>
                         <td class="text-center"> <%= surveyList[count].date.toLocaleDateString() %> </td>
                         <td class="text-center" scope="col"> <%= surveyList[count].questions.length %> </td>
-                        <td class=> <%= surveyList[count].title %> </td>
                         <td class="text-end"> 
-                            <a href="/survey/take/<%= surveyList[count]._id %>" class="btn btn-secondary btn-sm edit"><i class="fas fa-edit fa-sm"></i> TakeSurvey </a>
-                            <a href="/survey/manage/<%= surveyList[count]._id %>" class="btn btn-dark btn-sm edit"><i class="fas fa-edit fa-sm"></i> ViewResult </a>
+                            <a href="/survey/take/<%= surveyList[count]._id %>" class="btn btn-dark btn-sm edit"><i class="fas fa-edit fa-sm"></i> TakeSurvey </a>
                         </td>
                     </tr>
                     <% } %> 

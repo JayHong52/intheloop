@@ -263,3 +263,11 @@ export function ProcessTakeSurvey(req: express.Request, res: express.Response, n
         res.redirect('/survey/active');
     });
 }    
+
+// ====================================
+//   Show Survey Result: - Display 
+// ====================================
+
+export function DisplaySurveyResultPage(req: express.Request, res: express.Response, next: express.NextFunction) {
+
+}
