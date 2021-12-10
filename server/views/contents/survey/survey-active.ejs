@@ -21,8 +21,8 @@
                         <th class=" text-center" scope="row">
                             <%= count + 1 %> 
                         </th>
-                        <td class="text-center"> <%= surveyList[count].userName %> </td>
-                        <td class="text-center"> <%= surveyList[count].date %> </td>
+                        <td class="text-center"> <%= surveyList[count].user.username %> </td>
+                        <td class="text-center"> <%= surveyList[count].date.toLocaleDateString() %> </td>
                         <td class="text-center" scope="col"> <%= surveyList[count].questions.length %> </td>
                         <td class=> <%= surveyList[count].title %> </td>
                         <td class="text-end"> 

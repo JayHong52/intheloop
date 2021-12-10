@@ -13,7 +13,8 @@ import express from 'express';
 import { DisplaySurveyAddPage, DisplaySurveyEditPage, 
          DisplaySurveyManagePage, DisplaySurveyActivePage, 
          ProcessSurveyAddPage, ProcessSurveyDeletePage, ProcessSurveyEditPage, 
-         DisplayQuestionAddPage, ProcessQuestionAddPage, ProcessQuestionDeletePage, DisplayTakeSurvey } from '../controllers/survey';
+         DisplayQuestionAddPage, ProcessQuestionAddPage, ProcessQuestionDeletePage, 
+         DisplayTakeSurvey, ProcessTakeSurvey } from '../controllers/survey';
                   
 const router = express.Router();
 
@@ -43,6 +44,8 @@ router.get('/delete/:id', ProcessSurveyDeletePage);
 /* =========================================================================== */
 
 router.get('/take/:id', DisplayTakeSurvey);
+
+router.post('/take/:id', ProcessTakeSurvey);
 
 /* =========================================================================== */
 /*  Questions 

@@ -1,5 +1,5 @@
 /*=======================================================
-  FileName: /server/models/surveyAnswer.ts
+  FileName: /server/models/surveyanswer.ts
   ProjectName: IntheLoop - Survey 
   CompanyName: Centennial Collge, Fall 2021
   Author: Hong, Jiwoong - 301153138
@@ -12,16 +12,15 @@
   import mongoose from 'mongoose';
   const Schema = mongoose.Schema;
   
-  const surveyAnswerSchema = new Schema({
-        
+  const surveyAnswerSchema = new Schema({      
       user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
       survey: { type: mongoose.Schema.Types.ObjectId, ref: 'Survey' },
-      answers: [{ String }]
+      answers: [ String ]
   },
   {
       collection: "intheLoopSurveyAnswers"
   });
   
-  const Model = mongoose.model("Survey", surveyAnswerSchema)
+  const Model = mongoose.model("SurveyAnswer", surveyAnswerSchema)
   
   export default Model

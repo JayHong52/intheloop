@@ -11,10 +11,13 @@
 
 import express from 'express';
 import surveyModel from '../models/survey';
-import surveyAnswerModel from '../models/surveyAnswer';
+import surveyAnswerModel from '../models/survey_answer';
 import questionModel from '../models/question' 
 import { UserDisplayName } from '../utils';
 import { findSourceMap } from 'module';
+import { Mongoose } from 'mongoose';
+import { RequestHeaderFieldsTooLarge } from 'http-errors';
+import { brotliDecompressSync } from 'zlib';
 
 // ===========================
 //  Manage Survey List : DISPLAY 
@@ -37,16 +40,15 @@ export function DisplaySurveyManagePage(req: express.Request, res: express.Respo
 // ===========================
 export function DisplaySurveyActivePage(req: express.Request, res: express.Response, next: express.NextFunction) {
 
-    surveyModel.find(
-        { active: true },
-        function (err, intheLoopSurveys) {
-            if (err) {
-                console.error(err);
-                res.end(err);
-            }
-            res.render('index-sub', { title: 'Active Surveys', page: 'survey/survey-active', surveyList: intheLoopSurveys, displayName: UserDisplayName(req) })
+    surveyModel.find({ active: true }).
+                populate('user').
+                populate('questions').sort('date').exec( function (err, surveyItem) { 
+        if (err) {
+            console.error(err);
+            res.end(err);
         }
-    ).sort('date')
+        res.render('index-sub', { title: 'Active Surveys', page: 'survey/survey-active', surveyList: surveyItem, displayName: UserDisplayName(req) })
+    })
 };
 
 // ===========================
@@ -105,7 +107,9 @@ export function ProcessSurveyAddPage(req: express.Request, res: express.Response
         "user": req.user,
         "title": req.body.title,
         "remarks": req.body.remarks,
+        "date": new Date(),
         "active": false,
+        
     });
 
     let id = newSurvey._id;
@@ -225,3 +229,37 @@ export function DisplayTakeSurvey(req: express.Request, res: express.Response, n
         res.render('index-sub', { title: surveyItem.title , page: "survey/survey-take", item: surveyItem, displayName: UserDisplayName(req) })
     })
 }
+// ====================================
+//   Take Survey: - Process 
+// ====================================
+
+export function ProcessTakeSurvey(req: express.Request, res: express.Response, next: express.NextFunction){
+    let id = req.params.id;
+    let fields = ["answer1", "answer2", "answer3", "answer4", "answer5"];
+    let answers: Array<String> = [];
+
+    for (let i = 0; i < fields.length; i++){
+        if ( req.body[fields[i]] != null )
+        {
+            let answer = req.body[fields[i]];
+            answers.push(answer);
+        }
+    }
+
+    console.log(answers);
+
+    let surveyAnswer = new surveyAnswerModel({
+        "user": req.user,
+        "survey": id,
+        "answers": answers
+    })
+    console.log(surveyAnswer);
+
+    surveyAnswerModel.create(surveyAnswer, (err: any) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        };
+        res.redirect('/survey/active');
+    });
+}    

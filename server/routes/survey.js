@@ -14,6 +14,7 @@ router.get('/add', survey_1.DisplaySurveyAddPage);
 router.post('/add', survey_1.ProcessSurveyAddPage);
 router.get('/delete/:id', survey_1.ProcessSurveyDeletePage);
 router.get('/take/:id', survey_1.DisplayTakeSurvey);
+router.post('/take/:id', survey_1.ProcessTakeSurvey);
 router.get('/manage/:id/question/add', survey_1.DisplayQuestionAddPage);
 router.post('/manage/:id/question/add', survey_1.ProcessQuestionAddPage);
 router.get('/manage/:id/question/delete/:qid', survey_1.ProcessQuestionDeletePage);

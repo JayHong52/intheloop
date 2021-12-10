@@ -3,8 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DisplayTakeSurvey = exports.ProcessQuestionDeletePage = exports.ProcessQuestionAddPage = exports.DisplayQuestionAddPage = exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyActivePage = exports.DisplaySurveyManagePage = void 0;
+exports.ProcessTakeSurvey = exports.DisplayTakeSurvey = exports.ProcessQuestionDeletePage = exports.ProcessQuestionAddPage = exports.DisplayQuestionAddPage = exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyActivePage = exports.DisplaySurveyManagePage = void 0;
 const survey_1 = __importDefault(require("../models/survey"));
+const survey_answer_1 = __importDefault(require("../models/survey_answer"));
 const question_1 = __importDefault(require("../models/question"));
 const utils_1 = require("../utils");
 function DisplaySurveyManagePage(req, res, next) {
@@ -19,13 +20,15 @@ function DisplaySurveyManagePage(req, res, next) {
 exports.DisplaySurveyManagePage = DisplaySurveyManagePage;
 ;
 function DisplaySurveyActivePage(req, res, next) {
-    survey_1.default.find({ active: true }, function (err, intheLoopSurveys) {
+    survey_1.default.find({ active: true }).
+        populate('user').
+        populate('questions').sort('date').exec(function (err, surveyItem) {
         if (err) {
             console.error(err);
             res.end(err);
         }
-        res.render('index-sub', { title: 'Active Surveys', page: 'survey/survey-active', surveyList: intheLoopSurveys, displayName: (0, utils_1.UserDisplayName)(req) });
-    }).sort('date');
+        res.render('index-sub', { title: 'Active Surveys', page: 'survey/survey-active', surveyList: surveyItem, displayName: (0, utils_1.UserDisplayName)(req) });
+    });
 }
 exports.DisplaySurveyActivePage = DisplaySurveyActivePage;
 ;
@@ -67,6 +70,7 @@ function ProcessSurveyAddPage(req, res, next) {
         "user": req.user,
         "title": req.body.title,
         "remarks": req.body.remarks,
+        "date": new Date(),
         "active": false,
     });
     let id = newSurvey._id;
@@ -151,4 +155,31 @@ function DisplayTakeSurvey(req, res, next) {
     });
 }
 exports.DisplayTakeSurvey = DisplayTakeSurvey;
+function ProcessTakeSurvey(req, res, next) {
+    let id = req.params.id;
+    let fields = ["answer1", "answer2", "answer3", "answer4", "answer5"];
+    let answers = [];
+    for (let i = 0; i < fields.length; i++) {
+        if (req.body[fields[i]] != null) {
+            let answer = req.body[fields[i]];
+            answers.push(answer);
+        }
+    }
+    console.log(answers);
+    let surveyAnswer = new survey_answer_1.default({
+        "user": req.user,
+        "survey": id,
+        "answers": answers
+    });
+    console.log(surveyAnswer);
+    survey_answer_1.default.create(surveyAnswer, (err) => {
+        if (err) {
+            console.error(err);
+            res.end(err);
+        }
+        ;
+        res.redirect('/survey/active');
+    });
+}
+exports.ProcessTakeSurvey = ProcessTakeSurvey;
 //# sourceMappingURL=survey.js.map

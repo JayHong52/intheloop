@@ -8,10 +8,10 @@ const Schema = mongoose_1.default.Schema;
 const surveyAnswerSchema = new Schema({
     user: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'User' },
     survey: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'Survey' },
-    answers: [{ String }]
+    answers: [String]
 }, {
     collection: "intheLoopSurveyAnswers"
 });
-const Model = mongoose_1.default.model("Survey", surveyAnswerSchema);
+const Model = mongoose_1.default.model("SurveyAnswer", surveyAnswerSchema);
 exports.default = Model;
-//# sourceMappingURL=surveyAnswer.js.map
+//# sourceMappingURL=survey_answer.js.map
