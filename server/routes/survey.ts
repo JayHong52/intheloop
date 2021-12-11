@@ -5,7 +5,7 @@
   Author: Hong, Jiwoong - 301153138
           Vargas, Joel  - 301161522
           Zheng, Ziwei  - 301180464
-  Date: 2021-11-26
+  Date: 2021-12-10
   Remarks: Survey router
   ======================================================*/
 
@@ -63,8 +63,6 @@ router.get('/take/:id/question/:qid/:oid', OptionSelect);
 
 router.get('/result/:id', DisplaySurveyResultPage);
 
-
-
 /* =========================================================================== */
 /*  Questions 
 /* =========================================================================== */
@@ -84,6 +82,7 @@ router.get('/manage/:id/question/edit/:qid', DisplayQuestionEditPage);
 router.post('/manage/:id/question/edit/:qid', ProcessQuestionEditPage);
 
 // Survey Questions: Delete 
+
 router.get('/manage/:id/question/delete/:qid', ProcessQuestionDeletePage)
 
 export default router;
