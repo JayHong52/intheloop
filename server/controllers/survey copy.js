@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DisplaySurveyResultPage = exports.OptionSelect = exports.ProcessQuestion = exports.AnswerQuestion = exports.ProcessTakeSurvey = exports.DisplayTakeSurvey = exports.ProcessQuestionDeletePage = exports.ProcessQuestionEditPage = exports.DisplayQuestionEditPage = exports.ProcessQuestionAddPage = exports.DisplayQuestionAddPage = exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyActivePage = exports.DisplaySurveyManagePage = void 0;
+exports.DisplaySurveyResultPage = exports.ProcessQuestion = exports.AnswerQuestion = exports.ProcessTakeSurvey = exports.DisplayTakeSurvey = exports.ProcessQuestionDeletePage = exports.ProcessQuestionEditPage = exports.DisplayQuestionEditPage = exports.ProcessQuestionAddPage = exports.DisplayQuestionAddPage = exports.ProcessSurveyDeletePage = exports.ProcessSurveyAddPage = exports.DisplaySurveyAddPage = exports.ProcessSurveyEditPage = exports.DisplaySurveyEditPage = exports.DisplaySurveyActivePage = exports.DisplaySurveyManagePage = void 0;
 const survey_1 = __importDefault(require("../models/survey"));
 const question_1 = __importDefault(require("../models/question"));
 const option_1 = __importDefault(require("../models/option"));
@@ -217,60 +217,21 @@ function DisplayTakeSurvey(req, res, next) {
 }
 exports.DisplayTakeSurvey = DisplayTakeSurvey;
 function ProcessTakeSurvey(req, res, next) {
-    res.redirect('/survey/active');
+    let id = req.params.id;
+    let answer = req.body.q0o0;
+    console.log(answer);
 }
 exports.ProcessTakeSurvey = ProcessTakeSurvey;
 function AnswerQuestion(req, res, next) {
-    let id = req.params.id;
-    let qid = req.params.qid;
-    question_1.default.findById({ _id: qid }).populate('options').
-        exec(function (err, item) {
-        if (err) {
-            console.error(err);
-            res.end(err);
-        }
-        res.render('index-sub', { values: values, title: "Add Survey Questions", page: "survey/answer-question", surveyid: id, item: item, displayName: (0, utils_1.UserDisplayName)(req) });
-    });
+    console.log();
 }
 exports.AnswerQuestion = AnswerQuestion;
 function ProcessQuestion(req, res, next) {
-    let id = req.params.id;
-    let qid = req.params.qid;
-    let answer = req.body.answer;
-    question_1.default.updateOne({ _id: qid }).$where;
+    console.log();
 }
 exports.ProcessQuestion = ProcessQuestion;
-function OptionSelect(req, res, next) {
-    let id = req.params.id;
-    let qid = req.params.qid;
-    let oid = req.params.oid;
-    option_1.default.findOneAndUpdate({ _id: oid }, { $inc: { 'answerCount': 1 } }).exec(function (err, item) {
-        if (err) {
-            console.error(err);
-            res.end(err);
-        }
-        res.redirect('/survey/take/' + id);
-    });
-}
-exports.OptionSelect = OptionSelect;
 function DisplaySurveyResultPage(req, res, next) {
-    let id = req.params.id;
-    survey_1.default.findById({ _id: id }).populate('questions').
-        populate({
-        path: 'questions',
-        populate: {
-            path: 'options',
-            model: 'Option'
-        }
-    }).
-        exec(function (err, surveyItem) {
-        if (err) {
-            console.error(err);
-            res.end(err);
-        }
-        console.log(surveyItem);
-        res.render('index-sub', { title: surveyItem.title, page: "survey/survey-result", item: surveyItem, questions: surveyItem.questions, displayName: (0, utils_1.UserDisplayName)(req) });
-    });
+    res.render('index-sub', { title: "", page: "survey/survey-result", item: "", displayName: (0, utils_1.UserDisplayName)(req) });
 }
 exports.DisplaySurveyResultPage = DisplaySurveyResultPage;
-//# sourceMappingURL=survey.js.map
+//# sourceMappingURL=survey%20copy.js.map

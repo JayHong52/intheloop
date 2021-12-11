@@ -29,16 +29,28 @@
                 <div class="jumbotron bg-light mt-5 p-5 text-center">
                     <h6> Question #<%= i + 1 %></h6>
                     <!-- Question Goes Here -->
-                    <h1 class="display-6" name="q<%= i %>"> <%= item.questions[i].question %> </h1>
+                    <h1 class="display-6"> <%= item.questions[i].question %> </h1>
                     <hr>
-
-                    <a class="btn btn-secondary mt-3" href="/survey/take/<%=item._id%>/question/<%=item.questions[i]._id%>">
-                    What do you Think?</a>
+                    <a href="/survey/take/:id/question/:qid"></a>
+                    <select class="form-select text-center" name="answer<%= i + 1 %>" aria-label="size 3 select example">
                     
+                    <!-- Option Populates -->
+                    
+                    
+                    
+                    
+                    
+                    <% for (let opt = 0; opt < item.questions[i].options.length; opt++) { %> 
+
+                    <option name="q<%= i %>o<%= opt %>" value="<%= item.questions[i].options[opt].optionText %>"> <%= item.questions[i].options[opt].optionText %> </option>
+                    
+                    <% } %> 
+
+                    </select>
                 </div>
-             </div>
+            </div>
             <div class="col-lg-3 col-md-1 col-sm-12"></div>
-         </div>
+        </div>
 
         <% } %> 
             <!-- ============================================================================================ -->
@@ -49,7 +61,7 @@
 
             <div class="col-lg-6 col-md-10 col-sm-12 text-center p-5 my-5">
                 <h1 class="display-6"> Thank you for your time!</h1>
-                <button type="submit" class="btn btn-dark my-4">Submit Answers</a>
+                <button type="submit" class="btn btn-secondary my-4">Submit Answers</a>
             </div>
             <div class="col-lg-3 col-md-1 col-sm-12"></div>
         </div>

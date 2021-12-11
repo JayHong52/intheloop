@@ -14,7 +14,8 @@ import { DisplaySurveyAddPage, DisplaySurveyEditPage,
          DisplaySurveyManagePage, DisplaySurveyActivePage, 
          ProcessSurveyAddPage, ProcessSurveyDeletePage, ProcessSurveyEditPage, 
          DisplayQuestionAddPage, ProcessQuestionAddPage, ProcessQuestionDeletePage, 
-         DisplayTakeSurvey, ProcessTakeSurvey, DisplaySurveyResultPage, DisplayQuestionEditPage, ProcessQuestionEditPage
+         DisplayTakeSurvey, ProcessTakeSurvey, DisplaySurveyResultPage, DisplayQuestionEditPage, ProcessQuestionEditPage,
+         AnswerQuestion, ProcessQuestion, OptionSelect
         
         } from '../controllers/survey';
                   
@@ -49,11 +50,20 @@ router.get('/take/:id', DisplayTakeSurvey);
 
 router.post('/take/:id', ProcessTakeSurvey);
 
+router.get('/take/:id/question/:qid', AnswerQuestion);
+
+router.post('/take/:id/question/:qid', ProcessQuestion);
+
+router.get('/take/:id/question/:qid/:oid', OptionSelect);
+
+
 /* =========================================================================== */
 /*  See Results
 /* =========================================================================== */
 
 router.get('/result/:id', DisplaySurveyResultPage);
+
+
 
 /* =========================================================================== */
 /*  Questions 

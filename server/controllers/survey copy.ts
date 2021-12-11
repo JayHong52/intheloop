@@ -286,66 +286,92 @@ export function DisplayTakeSurvey(req: express.Request, res: express.Response, n
         }
         console.log(surveyItem);
 
+
         res.render('index-sub', { title: surveyItem.title, page: "survey/survey-take", item: surveyItem, questions: surveyItem.questions, displayName: UserDisplayName(req) })
     })
 }
-
 // ====================================
 //   Take Survey: - Process 
 // ====================================
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export function ProcessTakeSurvey(req: express.Request, res: express.Response, next: express.NextFunction){
-    res.redirect('/survey/active');
+    let id = req.params.id; 
+    
+    let answer = req.body.q0o0;
+
+    console.log(answer);
+
 }
+
+//     surveyModel.findById({ _id: id}).populate('questions').
+//     // Element Populate
+//     populate({ 
+//         path: 'questions',
+//         populate: {
+//           path: 'options',
+//           model: 'Opti//         } 
+//      }).
+//     exec( function (err, surveyItem) { 
+//         if (err) {
+//             console.error(err);
+//             res.end(err);
+//         }  
+//     })
+// }
+    
+
+
+
+
+
+    
+    // let fields = ["answer1", "answer2", "answer3", "answer4", "answer5"];
+    // let answers: Array<String> = [];
+
+    // for (let i = 0; i < fields.length; i++){
+    //     if ( req.body[fields[i]] != null )
+    //     {
+    //         let answer = req.body[fields[i]];
+    //         answers.push(answer);
+    //     }
+    // }
+
+
+
+
 
 
 // ====================================
 //   Answer Question: - Display 
 // ====================================
 export function AnswerQuestion(req: express.Request, res: express.Response, next: express.NextFunction) {
-    let id = req.params.id
-    let qid = req.params.qid
 
-    questionModel.findById({ _id: qid}).populate('options').
-    exec( function (err, item) { 
-        if (err) {
-            console.error(err);
-            res.end(err);
-        }
-        res.render('index-sub', { values: values, title: "Add Survey Questions", page: "survey/answer-question", surveyid: id, item: item, displayName: UserDisplayName(req) })
-    })
+console.log();
 }
-
-// ====================================
-//   Answer Question: - Process 
-// ====================================
 
 export function ProcessQuestion(req: express.Request, res: express.Response, next: express.NextFunction) {
 
-    let id = req.params.id;
-    let qid = req.params.qid;
-    let answer = req.body.answer;
-
-    questionModel.updateOne({_id:qid}).$where
-
+console.log();
 }
 
-// ====================================
-//   Select Option
-// ====================================
-export function OptionSelect(req: express.Request, res: express.Response, next: express.NextFunction) {
-    let id = req.params.id;
-    let qid = req.params.qid;
-    let oid = req.params.oid;
 
-    optionModel.findOneAndUpdate({_id : oid}, {$inc : { 'answerCount' : 1 }}).exec( function (err, item) { 
-        if (err) {
-            console.error(err);
-            res.end(err);
-        }
-        res.redirect('/survey/take/' + id);
-    });
-}
 
 
 // ====================================
@@ -353,24 +379,6 @@ export function OptionSelect(req: express.Request, res: express.Response, next: 
 // ====================================
 
 export function DisplaySurveyResultPage(req: express.Request, res: express.Response, next: express.NextFunction) {
-    let id = req.params.id
-    surveyModel.findById({ _id: id}).populate('questions').
-    // Element Populate
-    populate({ 
-        path: 'questions',
-        populate: {
-          path: 'options',
-          model: 'Option'
-        } 
-     }).
-    exec( function (err, surveyItem) { 
-        if (err) {
-            console.error(err);
-            res.end(err);
-        }
-        console.log(surveyItem);
 
-
-        res.render('index-sub', { title: surveyItem.title, page: "survey/survey-result", item: surveyItem, questions: surveyItem.questions, displayName: UserDisplayName(req) })
-    })
+    res.render('index-sub', { title: "", page: "survey/survey-result", item: "", displayName: UserDisplayName(req) })
 }
